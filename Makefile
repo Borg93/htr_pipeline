@@ -149,3 +149,31 @@ new_env_conda:
 	conda create -n htr_pipeline python=3.9
 	conda activate htr_pipeline
 	pip install -r requirements.txt
+
+
+
+####
+
+install: open_local_install install_openmmlab
+
+docker_install: open_local_install install_openmmlab_with_mim
+
+open_local_install:
+	@echo "Running requirements install"
+	pip install --upgrade pip
+	pip install -r requirements.txt
+
+install_openmmlab_with_mim:
+	@echo "Running Openmmlab requirements install"
+	pip install -U openmim
+	mim install mmengine
+	mim install mmcv
+	mim install mmdet
+	mim install mmocr
+
+install_openmmlab:
+	@echo "Running Openmmlab requirements install"
+	pip install mmengine
+	pip install mmcv
+	pip install mmdet
+	pip install mmocr

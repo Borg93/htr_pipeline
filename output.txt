@@ -1,0 +1,58 @@
+.
+├── docker
+│   └── Dockerfile
+├── docs
+│   ├── api.md
+│   ├── changelog.md
+│   ├── CONTRIBUTING.md
+│   ├── images
+│   │   └── riks.png
+│   └── README.md
+├── enviroment.yml
+├── LICENSE
+├── Makefile
+├── MANIFEST.in
+├── mkdocs.yml
+├── notebooks
+├── output.txt
+├── pyproject.toml
+├── requirements_dev.txt
+├── requirements.txt
+├── setup.py
+├── src
+│   └── htr_pipeline
+│       ├── asset
+│       │   └── I_will_be_included_in_MANIFEST.txt
+│       ├── htr_engine.py
+│       ├── inferencer
+│       │   ├── inferencer.py
+│       │   ├── __init__.py
+│       │   ├── line_inferencer.py
+│       │   ├── region_inferencer.py
+│       │   ├── transcriber_inferencer.py
+│       │   └── utils
+│       │       └── __init__.py
+│       ├── __init__.py
+│       ├── models
+│       │   ├── huggingface
+│       │   │   ├── hugginface_model_a.py
+│       │   │   └── huggingface_model.py
+│       │   ├── __init__.py
+│       │   ├── model_factory.py
+│       │   ├── model.py
+│       │   └── openmmlab
+│       │       ├── openmmlab_model_a.py
+│       │       └── openmmlab_model.py
+│       ├── py.typed
+│       └── visualizers
+│           ├── __init__.py
+│           ├── visualizer_factory.py
+│           └── visualizer.py
+└── tests
+    ├── integration
+    └── unit
+        ├── conftest.py
+        ├── __init__.py
+        └── test_main.py
+
+16 directories, 39 files
