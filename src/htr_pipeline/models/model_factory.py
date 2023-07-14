@@ -1,5 +1,5 @@
-from htr_pipeline.models.huggingface.trocr import TrOCR
-from htr_pipeline.models.openmmlab.rmdet_region import RmtDetRegion
+from htr_pipeline.models.region.rmdet_region import RmtDetRegion
+from htr_pipeline.models.transcribe.trocr import TrOCR
 
 
 class ModelFactory:
@@ -24,27 +24,31 @@ class HuggingFaceModelFactory:
     def __init__(self):
         self.models = {
             'TrOCR': TrOCR,
-            'modelB': HuggingFaceModelB
+            # 'modelB': HuggingFaceModelB
             # add more as needed
         }
-    
+
     def create(self, model_name):
         if model_name not in self.models:
             raise ValueError(f"Unknown HuggingFace model: {model_name}")
 
-        return self.models[model_name](model_name)
+        model = self.models[model_name](model_name)
+        model.load_model()  # Make sure to load the model as well
+        return model
 
 
 class OpenMMLabModelFactory:
     def __init__(self):
         self.models = {
             'RmtDetRegion': RmtDetRegion,
-            'modelB': OpenMMLabModelB
+            # 'modelB': OpenMMLabModelB
             # add more as needed
         }
-    
+
     def create(self, model_name):
         if model_name not in self.models:
-            raise ValueError(f"Unknown HuggingFace model: {model_name}")
+            raise ValueError(f"Unknown OpenMMLab model: {model_name}")
 
-        return self.models[model_name](model_name)
+        model = self.models[model_name](model_name)
+        model.load_model()  # Make sure to load the model as well
+        return model

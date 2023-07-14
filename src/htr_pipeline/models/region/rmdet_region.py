@@ -1,8 +1,8 @@
 
-from htr_pipeline.models.huggingface.huggingface_model import HuggingFaceModel
+from htr_pipeline.models.model import Model
 
 
-class RmtDetRegion(HuggingFaceModel):
+class RmtDetRegion(Model):
     def __init__(self, model_name):
         super().__init__(model_name)
 
@@ -18,3 +18,9 @@ class RmtDetRegion(HuggingFaceModel):
         # Implement prediction logic specific to ModelA
         pass
 
+    def load_model(self):
+        # Load model specifics
+        pass
+
+    def get_model_type(self):
+        return 'region'

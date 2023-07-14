@@ -1,9 +1,10 @@
 from htr_pipeline.inferencer.inferencer import Inferencer
+from htr_pipeline.inferencer.visualizers.region_visualizer import RegionVisualizer
 
 
 class RegionInferencer(Inferencer):
-    def __init__(self, model, visualizer):
-        super().__init__(model, visualizer)
+    def __init__(self, model):
+        super().__init__(model)
 
     def preprocess(self, input_image):
         # Implement your preprocessing logic here
@@ -25,4 +26,6 @@ class RegionInferencer(Inferencer):
         if not self.predicted:
             raise ValueError("Predict method must be run before visualize")
         # Implement the visualization logic specific to the region model here
-        self.visualizer.visualize(raw_output)
+        visualizer = RegionVisualizer()  # Create a new visualizer here
+        visualizer.visualize(raw_output)
+

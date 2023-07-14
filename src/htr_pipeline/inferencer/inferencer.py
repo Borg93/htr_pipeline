@@ -2,9 +2,8 @@ from abc import ABC, abstractmethod
 
 
 class Inferencer(ABC):
-    def __init__(self, model, visualizer):
+    def __init__(self, model):
         self.model = model
-        self.visualizer = visualizer
         self.predicted = False
 
     @abstractmethod

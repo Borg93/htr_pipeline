@@ -3,13 +3,14 @@ from abc import ABC, abstractmethod
 
 class Model(ABC):
     @abstractmethod
-    def preprocess(self, input):
+    def load_model(self):
         pass
 
     @abstractmethod
-    def predict(self, input):
+    def predict(self, input_data):
         pass
 
     @abstractmethod
-    def postprocess(self, raw_output):
+    def get_model_type(self):
         pass
+

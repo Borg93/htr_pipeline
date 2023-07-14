@@ -1,36 +1,50 @@
 import configparser
 import logging
 
-from .inferencer.line_inferencer import LineInferencer
-from .inferencer.region_inferencer import RegionInferencer
-from .inferencer.transcriber_inferencer import TranscriberInferencer
+# from .inferencer.line_inferencer import LineInferencer
+from .inferencer.inferencer_factory import InferencerFactory
+
+# from .inferencer.transcriber_inferencer import TranscriberInferencer
 from .models.model_factory import ModelFactory
-from .visualizers.visualizer_factory import VisualizerFactory
 
 
 class HTREngine:
-    def __init__(self, config_file_path):
+    def __init__(self):
         # Configure logging
         logging.basicConfig(level=logging.INFO)
         self.inferencers = {}
 
+        self.model_factory = ModelFactory()
+        self.inferencer_factory = InferencerFactory()
+
+    def load_region_model(self, config_file_path):
         try:
             config = configparser.ConfigParser()
             config.read(config_file_path)
-
-            model_factory = ModelFactory()
-            visualizer_factory = VisualizerFactory()
-
-            self.set_region_model(config['region']['model'], config['region']['visualizer'], model_factory, visualizer_factory)
-            # Repeat for Line and Transcriber
-
+            region_model = self.model_factory.create(config)
+            self.inferencers['region'] = self.inferencer_factory.create(region_model)
         except Exception as e:
-            logging.error(f"Failed to initialize HTREngine: {str(e)}")
+            logging.error(f"Failed to load region model: {str(e)}")
 
-    def set_region_model(self, model_name, visualizer_name, model_factory, visualizer_factory):
-        region_model = model_factory.create(model_name)
-        region_visualizer = visualizer_factory.create(visualizer_name)
-        self.inferencers['region'] = RegionInferencer(region_model, region_visualizer)
+    def load_line_model(self, config_file_path):
+        try:
+            config = configparser.ConfigParser()
+            config.read(config_file_path)
+            line_model = self.model_factory.create(config)
+            line_model = self.model_factory.create(config)
+            self.inferencers['line'] = self.inferencer_factory.create(line_model)
+        except Exception as e:
+            logging.error(f"Failed to load line model: {str(e)}")
+
+    def load_transcribe_model(self, config_file_path):
+        try:
+            config = configparser.ConfigParser()
+            config.read(config_file_path)
+            transcribe_model = self.model_factory.create(config)
+            self.inferencers['transcriber'] = self.inferencer_factory.create(transcribe_model)
+        except Exception as e:
+            logging.error(f"Failed to load transcriber model: {str(e)}")
+
 
     # Add set_line_model and set_transcriber_model methods similarly
 
@@ -49,3 +63,10 @@ class HTREngine:
 
         except Exception as e:
             logging.error(f"Failed to run {inferencer_key} inferencer: {str(e)}")
+
+
+if __name__ == "__main__":
+    engine = HTREngine(config_file_path)
+    engine.set_model_for_inferencer(('region', 'RmTDet'))
+
+
