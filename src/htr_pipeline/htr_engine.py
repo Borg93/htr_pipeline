@@ -17,14 +17,16 @@ class HTREngine:
         self.model_factory = ModelFactory()
         self.inferencer_factory = InferencerFactory()
 
-    def load_region_model(self, config_file_path):
-        try:
-            config = configparser.ConfigParser()
-            config.read(config_file_path)
-            region_model = self.model_factory.create(config)
-            self.inferencers['region'] = self.inferencer_factory.create(region_model)
-        except Exception as e:
-            logging.error(f"Failed to load region model: {str(e)}")
+
+    def load_region_model(self, model_config):
+        model_name = model_config['name']
+        model = self.model_factory.create(model_name)
+
+        if model.get_model_type() != 'region':
+            raise ValueError(f"The model {model_name} is not a valid Region model.")
+
+        inferencer = self.inferencer_factory.create(model)
+        self.inferencers['region'] = inferencer
 
     def load_line_model(self, config_file_path):
         try:
@@ -66,7 +68,7 @@ class HTREngine:
 
 
 if __name__ == "__main__":
-    engine = HTREngine(config_file_path)
+    engine = HTREngine()
     engine.set_model_for_inferencer(('region', 'RmTDet'))
 
 
