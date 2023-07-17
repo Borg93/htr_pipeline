@@ -14,3 +14,5 @@ class Model(ABC):
     def get_model_type(self):
         pass
 
+# perhaps should be simlair as the strategy with inthertiance of model_type?
+

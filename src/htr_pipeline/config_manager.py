@@ -1,19 +1,25 @@
 import json
+import logging
 
 
 class ConfigManager:
-    def __init__(self, config_file_path):
-        with open(config_file_path) as config_file:
-            self.config_data = json.load(config_file)
+    def __init__(self):
+        self.config_data = {}
 
-    def get_model_name(self):
-        return self.config_data.get('model_name')
+    def read(self, config_file_path):
+        try:
+            with open(config_file_path) as config_file:
+                self.config_data = json.load(config_file)
+        except FileNotFoundError:
+            logging.error(f"Config file not found: {config_file_path}")
+            raise
+        except json.JSONDecodeError:
+            logging.error(f"Failed to parse config file: {config_file_path}")
+            raise
 
-    def get_model_type(self):
-        return self.config_data.get('model_type')
-
-    def get_preprocessing_strategy(self):
-        return self.config_data.get('preprocessing_strategy')
-
-    def get_postprocessing_strategy(self):
-        return self.config_data.get('postprocessing_strategy')
+    def get(self, key):
+        try:
+            return self.config_data[key]
+        except KeyError:
+            logging.error(f"Key not found in config data: {key}")
+            raise
