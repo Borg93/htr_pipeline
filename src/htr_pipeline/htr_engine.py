@@ -1,39 +1,46 @@
-import json
 import logging
 
+from .config_manager import ConfigManager
 from .inferencer.inferencer_factory import InferencerFactory
 from .models.model_factory import ModelFactory
+from .strategies.strategy_factory import PostprocessingStrategyFactory, PreprocessingStrategyFactory
 
 
 class HTREngine:
     def __init__(self):
         logging.basicConfig(level=logging.INFO)
         self.inferencers = {}
+        self.config_manager = ConfigManager()
         self.model_factory = ModelFactory()
         self.inferencer_factory = InferencerFactory()
+        self.preprocessing_strategy_factory = PreprocessingStrategyFactory()
+        self.postprocessing_strategy_factory = PostprocessingStrategyFactory()
 
     def load_model(self, config_file_path):
         try:
-            with open(config_file_path, 'r') as config_file:
-                config = json.load(config_file)
-
-            model_name = config.get('model_name')
-            model_type = config.get('model_type')
-
-            if not model_name or not model_type:
-                raise ValueError("Both 'model_name' and 'model_type' must be specified in the configuration file.")
-
+            config = self.config_manager.read(config_file_path)
+            model_name = config['model_name']
             model = self.model_factory.create(model_name)
 
-            if model.get_model_type() != model_type:
-                raise ValueError(f"The model {model_name} does not match the specified model type {model_type}.")
+            preprocessing_strategies = []
+            if 'preprocessing' in config:
+                for strategy in config['preprocessing']:
+                    preprocessing_strategies.append(self.preprocessing_strategy_factory.create(strategy))
 
-            self.inferencers[model_type] = self.inferencer_factory.create(model)
+            postprocessing_strategies = []
+            if 'postprocessing' in config:
+                for strategy in config['postprocessing']:
+                    postprocessing_strategies.append(self.postprocessing_strategy_factory.create(strategy))
+
+            inferencer = self.inferencer_factory.create(model, preprocessing_strategies, postprocessing_strategies)
+            model_type = model.get_model_type()
+            self.inferencers[model_type] = inferencer
         except Exception as e:
             logging.error(f"Failed to load model: {str(e)}")
 
-    def run_inference(self, inferencer_key, input_image):
-        return self._run_inferencer(inferencer_key, input_image)
+
+    def run_inference(self, model_type, input_image):
+        return self._run_inferencer(model_type, input_image)
 
     def _run_inferencer(self, inferencer_key, input_image):
         try:
@@ -45,7 +52,8 @@ class HTREngine:
         except Exception as e:
             logging.error(f"Failed to run {inferencer_key} inferencer: {str(e)}")
 
+
 if __name__ == "__main__":
     engine = HTREngine()
     engine.load_model('config_rmtdet.json')
-    # result = engine.run_inference('region', input_image)
+    engine.run_inference('region', 'input_image.png')
