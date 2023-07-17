@@ -1,0 +1,61 @@
+.
+├── LICENSE
+├── MANIFEST.in
+├── Makefile
+├── docker
+│   └── Dockerfile
+├── docs
+│   ├── CONTRIBUTING.md
+│   ├── README.md
+│   ├── api.md
+│   ├── changelog.md
+│   └── images
+│       └── riks.png
+├── enviroment.yml
+├── mkdocs.yml
+├── notebooks
+│   └── test.ipynb
+├── output.txt
+├── project_structure.txt
+├── pyproject.toml
+├── requirements.txt
+├── requirements_dev.txt
+├── setup.py
+├── src
+│   └── htr_pipeline
+│       ├── __init__.py
+│       ├── asset
+│       │   └── I_will_be_included_in_MANIFEST.txt
+│       ├── htr_engine.py
+│       ├── inferencer
+│       │   ├── __init__.py
+│       │   ├── inferencer.py
+│       │   ├── inferencer_factory.py
+│       │   ├── line_inferencer.py
+│       │   ├── region_inferencer.py
+│       │   ├── transcriber_inferencer.py
+│       │   ├── utils
+│       │   │   └── __init__.py
+│       │   └── visualizers
+│       │       ├── __init__.py
+│       │       ├── line_visualizer.py
+│       │       ├── region_visualizer.py
+│       │       └── transcriber_visualizer.py
+│       ├── models
+│       │   ├── __init__.py
+│       │   ├── lines
+│       │   ├── model.py
+│       │   ├── model_factory.py
+│       │   ├── region
+│       │   │   └── rmdet_region.py
+│       │   └── transcribe
+│       │       └── trocr.py
+│       └── py.typed
+└── tests
+    ├── integration
+    └── unit
+        ├── __init__.py
+        ├── conftest.py
+        └── test_main.py
+
+17 directories, 41 files

@@ -16,11 +16,13 @@ class RmtDetRegion(Model):
 
     def predict(self, input):
         # Implement prediction logic specific to ModelA
-        pass
+        print("Model region predict")
+        return "prediction from rmtdet_region"
 
     def load_model(self):
         # Load model specifics
-        pass
+        print("Model loaded")
 
+    @property
     def get_model_type(self):
         return 'region'
