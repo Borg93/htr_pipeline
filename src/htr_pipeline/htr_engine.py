@@ -19,7 +19,14 @@ class HTREngine:
         self.preprocessing_strategy_factory = PreprocessingStrategyFactory()
         self.postprocessing_strategy_factory = PostprocessingStrategyFactory()
 
+    def push_to_hf_hub():
+        pass
+
     def load_model(self, folder_path):
+
+        # TODO should have simlair implmentation as bertopic? Should load from the hub or locally
+        # TODO think about SOLID. Single-responsibility principle.. THis class becomes now loader and inferencer. 
+        # Is there away to refactor away the setter as the config manager is validatior
         try:
             self.config_manager.read(folder_path)
             model_name = self.config_manager.get('model_name')
@@ -61,6 +68,9 @@ class HTREngine:
             return processed_output
         except Exception as e:
             logging.error(f"Failed to run {inferencer_key} inferencer: {str(e)}")
+    
+    def assembly_infernecer():
+        pass # TODO perhaps you load each models and later you assemble them as pipeline work in scikit?
 
 
 if __name__ == "__main__":
