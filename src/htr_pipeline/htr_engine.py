@@ -8,6 +8,8 @@ from .strategies.strategy_factory import PostprocessingStrategyFactory, Preproce
 
 # TODO - make the class cleaner or perhaps introude dependcy injection?
 # TODO - option to load from the hub and local.
+# IDEA : We should be able to pass a model but additonal configurations as strategies and type of inferencer it was should be able to be saved and seralized 
+# and be push to the hub. Perhaps simlair as bertopic implmetnation?
 
 class HTREngine:
     def __init__(self):
