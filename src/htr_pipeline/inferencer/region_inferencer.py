@@ -31,7 +31,7 @@ class RegionInferencer(Inferencer):
 
     def predict(self, preprocessed_image):
         # Implement the prediction logic specific to the region model here
-        raw_output = self.model.predict(preprocessed_image)  # Placeholder
+        standardformat = self.model.predict(preprocessed_image)  # Placeholder
         self.predicted = True  # Indicate that a prediction has been made
         return raw_output
 
