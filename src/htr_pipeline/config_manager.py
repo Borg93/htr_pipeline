@@ -1,13 +1,16 @@
 import json
 import logging
+import os
 
 
 class ConfigManager:
     def __init__(self):
         self.configs = {}  # Store configs by their model_name
 
-    def read(self, config_file_path):
+    def read(self, folder_path):
         try:
+            config_file_path = os.path.join(folder_path, 'config.json')
+
             with open(config_file_path) as config_file:
                 new_config = json.load(config_file)
                 model_name = new_config.get('model_name')

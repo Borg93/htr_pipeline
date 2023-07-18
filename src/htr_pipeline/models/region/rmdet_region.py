@@ -1,4 +1,6 @@
 
+import os
+
 from htr_pipeline.models.model import Model
 
 
@@ -28,6 +30,8 @@ class RmtDetRegion(Model):
         print("Model region predict")
         return "prediction from rmtdet_region"
 
-    def load_model(self):
-        # Load model specifics
-        print("Model loaded: ", self._model_name)
+    def load_model(self, folder_path):
+        model_file_path = os.path.join(folder_path, 'model.pth')
+        # self.model = torch.load(model_file_path)
+
+        print(f"Model loaded: {self._model_name} from {model_file_path}")

@@ -20,5 +20,5 @@ class Model(ABC):
         pass
 
     @abstractmethod
-    def load_model(self):
+    def load_model(self, folder_path):
         pass

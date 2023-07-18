@@ -1,6 +1,0 @@
-{
-    "model_name": "RmTDet",
-    "model_type": "region",
-    "preprocessing": "simplebinarize",
-    "postprocessing": "simplepostprocessing"
-}

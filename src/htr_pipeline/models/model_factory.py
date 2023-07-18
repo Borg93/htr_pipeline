@@ -5,12 +5,12 @@ from htr_pipeline.models.transcribe.trocr import TrOCR
 class ModelFactory:
     def __init__(self):
         self.models = {
-            "RmTDet": RmtDetRegion,
+            "RmtDetRegion": RmtDetRegion,
             "TrOCR" : TrOCR
             # add your other models here
         }
 
-    def create(self, model_name, model_type):
+    def create(self, model_name, model_type, folder_path):
         model_class = self.models.get(model_name)
         if not model_class:
             raise ValueError(f"Invalid model name: {model_name}")
@@ -20,6 +20,6 @@ class ModelFactory:
             raise ValueError(f"Model type mismatch: model {model_name} is not of type {model_type}")
 
         model = self.models[model_name]()
-        model.load_model()  # Make sure to load the model as well
+        model.load_model(folder_path)
 
         return model

@@ -6,6 +6,9 @@ from .models.model_factory import ModelFactory
 from .strategies.strategy_factory import PostprocessingStrategyFactory, PreprocessingStrategyFactory
 
 
+# TODO - make the class cleaner or perhaps introude dependcy injection?
+# TODO - option to load from the hub and local.
+
 class HTREngine:
     def __init__(self):
         logging.basicConfig(level=logging.INFO)
@@ -16,9 +19,9 @@ class HTREngine:
         self.preprocessing_strategy_factory = PreprocessingStrategyFactory()
         self.postprocessing_strategy_factory = PostprocessingStrategyFactory()
 
-    def load_model(self, config_file_path):
+    def load_model(self, folder_path):
         try:
-            self.config_manager.read(config_file_path)
+            self.config_manager.read(folder_path)
             model_name = self.config_manager.get('model_name')
 
             # Check if we already have an inferencer for this configuration
@@ -27,7 +30,8 @@ class HTREngine:
                 return
 
             model_type = self.config_manager.get('model_type')
-            model = self.model_factory.create(model_name, model_type)
+
+            model = self.model_factory.create(model_name, model_type, folder_path)
 
 
             preprocessing_strategies = self._create_strategies('preprocessing')
@@ -61,5 +65,5 @@ class HTREngine:
 
 if __name__ == "__main__":
     engine = HTREngine()
-    engine.load_model('config_rmtdet.json')
+    engine.load_model('./RmtDet')
     engine.run_inference('region', 'input_image.png')
