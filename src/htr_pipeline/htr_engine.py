@@ -20,21 +20,23 @@ class HTREngine:
         try:
             self.config_manager.read(config_file_path)
             model_name = self.config_manager.get('model_name')
-            model = self.model_factory.create(model_name)
-            model_type = model.get_model_type()
+            model_type = self.config_manager.get('model_type')
 
-            preprocessing_strategies = self._create_strategies('preprocessing', model_type)
-            postprocessing_strategies = self._create_strategies('postprocessing', model_type)
+            model = self.model_factory.create(model_name, model_type)
+
+
+            preprocessing_strategies = self._create_strategies('preprocessing')
+            postprocessing_strategies = self._create_strategies('postprocessing')
 
             inferencer = self.inferencer_factory.create(model, preprocessing_strategies, postprocessing_strategies)
-            self.inferencers[model_type] = inferencer
+            self.inferencers[model_name] = inferencer
         except Exception as e:
             logging.error(f"Failed to load model: {str(e)}")
 
-    def _create_strategies(self, strategy_type, model_type):
+    def _create_strategies(self, strategy_type):
         strategy_factory = self.preprocessing_strategy_factory if strategy_type == 'preprocessing' else self.postprocessing_strategy_factory
         strategy_config = self.config_manager.get(strategy_type)
-        return [strategy_factory.create(strategy, model_type) for strategy in strategy_config] if strategy_config else []
+        return [strategy_factory.create(strategy, strategy_type) for strategy in strategy_config] if strategy_config else []
 
     def run_inference(self, model_type, input_image):
         return self._run_inferencer(model_type, input_image)
@@ -45,10 +47,11 @@ class HTREngine:
             preprocessed = inferencer.preprocess(input_image)
             raw_output = inferencer.predict(preprocessed)
             processed_output = inferencer.postprocess(raw_output)
-            inferencer.visualize()
+            inferencer.visualize(raw_output)
             return processed_output
         except Exception as e:
             logging.error(f"Failed to run {inferencer_key} inferencer: {str(e)}")
+
 
 if __name__ == "__main__":
     engine = HTREngine()

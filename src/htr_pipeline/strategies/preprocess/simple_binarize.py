@@ -3,7 +3,17 @@ from strategies.strategy import Strategy
 
 class SimpleBinarize(Strategy):
     def __init__(self):
-        super().__init__("region")
+        self._strategy_type = "preprocessing"
+        self._strategy_name = "simplebinarize"
+
+
+    @property
+    def strategy_name(self):
+        return self._strategy_name
+
+    @property
+    def strategy_type(self):
+        return self._strategy_type
 
     def process(self, input_image):
         # Actual implementation of binarization goes here

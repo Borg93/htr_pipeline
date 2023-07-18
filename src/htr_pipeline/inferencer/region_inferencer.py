@@ -4,12 +4,9 @@ from htr_pipeline.inferencer.visualizers.region_visualizer import RegionVisualiz
 
 class RegionInferencer(Inferencer):
     def __init__(self, model, preprocess_strategies=None, postprocess_strategies=None):
-        model_type = model.get_model_type()
-        if model_type != 'region':
-            raise ValueError(f"The model type for {model.__class__.__name__} should be 'region', got '{model_type}' instead.")
-        super().__init__(model)
         self.predicted = False
-
+        self._inferencer_type = "region"
+        self.model = model
         self.preprocess_strategies = preprocess_strategies or []
         self.postprocess_strategies = postprocess_strategies or []
 
@@ -17,6 +14,10 @@ class RegionInferencer(Inferencer):
             print("Warning: No preprocess strategies provided.")
         if not self.postprocess_strategies:
             print("Warning: No postprocess strategies provided.")
+
+    @property
+    def inferencer_type(self):
+        return self._inferencer_type
 
     def preprocess(self, input_image):
         for strategy in self.preprocess_strategies:
@@ -32,10 +33,7 @@ class RegionInferencer(Inferencer):
         # Implement the prediction logic specific to the region model here
         raw_output = self.model.predict(preprocessed_image)  # Placeholder
         self.predicted = True  # Indicate that a prediction has been made
-        print(raw_output)
-        print("region inferencer predicted.")
         return raw_output
-
 
     def visualize(self, raw_output):
         if not self.predicted:
@@ -43,4 +41,5 @@ class RegionInferencer(Inferencer):
         # Implement the visualization logic specific to the region model here
         visualizer = RegionVisualizer()  # Create a new visualizer here
         visualizer.visualize(raw_output)
+
 

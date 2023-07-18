@@ -9,12 +9,15 @@ class PreprocessingStrategyFactory:
             # Add more as needed
         }
 
-    def create(self, strategy_type, model_type):
-        if strategy_type not in self.strategies:
-            raise ValueError(f"Unknown preprocessing strategy type: {strategy_type}")
-        strategy = self.strategies[strategy_type]()
-        if strategy.strategy_type != model_type:
-            raise ValueError(f"Strategy {strategy_type} is not valid for model type {model_type}")
+    def create(self, strategy_name, strategy_type):
+        strategy_class = self.strategies.get(strategy_name)
+        if not strategy_class:
+            raise ValueError(f"Invalid strategy name: {strategy_name}")
+
+        strategy = strategy_class()
+        if strategy.strategy_type != strategy_type:
+            raise ValueError(f"Strategy type mismatch: strategy {strategy_name} is not of type {strategy_type}")
+
         return strategy
 
 
@@ -25,10 +28,13 @@ class PostprocessingStrategyFactory:
             # Add more as needed
         }
 
-    def create(self, strategy_type, model_type):
-        if strategy_type not in self.strategies:
-            raise ValueError(f"Unknown postprocessing strategy type: {strategy_type}")
-        strategy = self.strategies[strategy_type]()
-        if strategy.strategy_type != model_type:
-            raise ValueError(f"Strategy {strategy_type} is not valid for model type {model_type}")
+    def create(self, strategy_name, strategy_type):
+        strategy_class = self.strategies.get(strategy_name)
+        if not strategy_class:
+            raise ValueError(f"Invalid strategy name: {strategy_name}")
+
+        strategy = strategy_class()
+        if strategy.strategy_type != strategy_type:
+            raise ValueError(f"Strategy type mismatch: strategy {strategy_name} is not of type {strategy_type}")
+
         return strategy

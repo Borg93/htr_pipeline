@@ -2,9 +2,13 @@ from abc import ABC, abstractmethod
 
 
 class Inferencer(ABC):
-    def __init__(self, model):
-        self.model = model
-        self.predicted = False
+    def __init__(self):
+        pass
+
+    @property
+    @abstractmethod
+    def inferencer_type(self):
+        pass
 
     @abstractmethod
     def preprocess(self, input_image):

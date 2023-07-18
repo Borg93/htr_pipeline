@@ -3,8 +3,17 @@ from htr_pipeline.models.model import Model
 
 
 class RmtDetRegion(Model):
-    def __init__(self, model_name):
-        super().__init__(model_name)
+    def __init__(self):
+        self._model_type = 'region'
+        self.model_name= 'RmtDetRegion'
+
+    @property
+    def model_type(self):
+        return self._model_type
+
+    @property
+    def model_name(self):
+        return self._model_name
 
     def preprocess(self, input):
         # Implement preprocessing specific to ModelA
@@ -21,8 +30,4 @@ class RmtDetRegion(Model):
 
     def load_model(self):
         # Load model specifics
-        print("Model loaded")
-
-    @property
-    def get_model_type(self):
-        return 'region'
+        print("Model loaded: ", self._model_name)
