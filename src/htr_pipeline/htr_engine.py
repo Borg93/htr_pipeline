@@ -20,8 +20,13 @@ class HTREngine:
         try:
             self.config_manager.read(config_file_path)
             model_name = self.config_manager.get('model_name')
-            model_type = self.config_manager.get('model_type')
 
+            # Check if we already have an inferencer for this configuration
+            if model_name in self.inferencers:
+                logging.info(f"Configuration for model {model_name} already loaded, reusing existing inferencer.")
+                return
+
+            model_type = self.config_manager.get('model_type')
             model = self.model_factory.create(model_name, model_type)
 
 
@@ -38,16 +43,17 @@ class HTREngine:
         strategy_config = self.config_manager.get(strategy_type)
         return [strategy_factory.create(strategy, strategy_type) for strategy in strategy_config] if strategy_config else []
 
-    def run_inference(self, model_type, input_image):
-        return self._run_inferencer(model_type, input_image)
+    def run_inference(self, model_name, input_image):
+        return self._run_inferencer(model_name, input_image)
 
-    def _run_inferencer(self, inferencer_key, input_image):
+    def _run_inferencer(self, inferencer_key, input_image, visualize=False):
         try:
             inferencer = self.inferencers[inferencer_key]
             preprocessed = inferencer.preprocess(input_image)
             raw_output = inferencer.predict(preprocessed)
             processed_output = inferencer.postprocess(raw_output)
-            inferencer.visualize(raw_output)
+            if visualize:
+                inferencer.visualize(raw_output)
             return processed_output
         except Exception as e:
             logging.error(f"Failed to run {inferencer_key} inferencer: {str(e)}")
