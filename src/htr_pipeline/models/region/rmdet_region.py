@@ -1,21 +1,21 @@
 
 import os
 
+from htr_pipeline.enums import ModelName, ModelType
 from htr_pipeline.models.model import Model
 
 
 class RmtDetRegion(Model):
     def __init__(self):
-        self._model_type = 'region'
-        self.model_name= 'RmtDetRegion'
+        pass
 
     @property
     def model_type(self):
-        return self._model_type
+        return ModelType.REGION.value
 
     @property
     def model_name(self):
-        return self._model_name
+        return ModelName.RMT_DET_REGION.value
 
     def preprocess(self, input):
         # Implement preprocessing specific to ModelA
@@ -34,4 +34,4 @@ class RmtDetRegion(Model):
         model_file_path = os.path.join(folder_path, 'model.pth')
         # self.model = torch.load(model_file_path)
 
-        print(f"Model loaded: {self._model_name} from {model_file_path}")
+        print(f"Model loaded: {self.model_name} from {model_file_path}")

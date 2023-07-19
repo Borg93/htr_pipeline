@@ -1,3 +1,4 @@
+from htr_pipeline.enums import InferencerType
 from htr_pipeline.inferencer.inferencer import Inferencer
 from htr_pipeline.inferencer.visualizers.region_visualizer import RegionVisualizer
 
@@ -5,7 +6,6 @@ from htr_pipeline.inferencer.visualizers.region_visualizer import RegionVisualiz
 class RegionInferencer(Inferencer):
     def __init__(self, model, preprocess_strategies=None, postprocess_strategies=None):
         self.predicted = False
-        self._inferencer_type = "region"
         self.model = model
         self.preprocess_strategies = preprocess_strategies or []
         self.postprocess_strategies = postprocess_strategies or []
@@ -17,7 +17,7 @@ class RegionInferencer(Inferencer):
 
     @property
     def inferencer_type(self):
-        return self._inferencer_type
+        return InferencerType.REGION.value
 
     def preprocess(self, input_image):
         for strategy in self.preprocess_strategies:
@@ -31,9 +31,9 @@ class RegionInferencer(Inferencer):
 
     def predict(self, preprocessed_image):
         # Implement the prediction logic specific to the region model here
-        standardformat = self.model.predict(preprocessed_image)  # Placeholder
+        standard_format = self.model.predict(preprocessed_image)  # Placeholder
         self.predicted = True  # Indicate that a prediction has been made
-        return raw_output
+        return standard_format
 
     def visualize(self, raw_output):
         if not self.predicted:
