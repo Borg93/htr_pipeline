@@ -39,10 +39,10 @@ class HTREngine:
     def register_custom_model():
         raise NotImplementedError("The method to load custom models not implemented yet, should be simlair as register_custom_strategy.")
 
-    def run_inference(self, inferencer_key, input_image):
-        return self._run_inferencer(inferencer_key, input_image)
+    def run_inference(self, inferencer_key, input_image, visualize=False):
+        return self._run_inferencer(inferencer_key, input_image, visualize)
 
-    def _run_inferencer(self, inferencer_key, input_image, visualize=False):
+    def _run_inferencer(self, inferencer_key, input_image, visualize):
         try:
             inferencer: InferencerProtocol = self.inferencers[inferencer_key]
             preprocessed = inferencer.preprocess(input_image)
