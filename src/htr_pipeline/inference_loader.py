@@ -25,13 +25,19 @@ class InferencerLoader:
         logging.info(f"Loading {inferencer_key}.")
         return False
 
-    def _load_and_register(self, inferencer_key, model_name, model_type):
+    def _load_and_register(self, inferencer_key, model_name, model_type, config_data):
         try:
-            model = self.model_factory.create(model_name, model_type)
+            model = self.model_factory.create(model_name, model_type, config_data)
+            print(model)
+
             preprocessing_strategies = self._create_strategies(StrategyType.PREPROCESSING)
             postprocessing_strategies = self._create_strategies(StrategyType.POSTPROCESSING)
+            print(preprocessing_strategies)
 
             inferencer = self.inferencer_factory.create(model, preprocessing_strategies, postprocessing_strategies)
+
+            print(inferencer)
+
             self.inferencers[inferencer_key] = inferencer
         except Exception as e:
             logging.error(f"Failed to load model: {str(e)}")
@@ -39,6 +45,8 @@ class InferencerLoader:
     def _create_strategies(self, strategy_type: StrategyType):
         strategy_factory = self._get_strategy_factory(strategy_type)
 
+        print("strategy_factory: ", strategy_factory)
+        
         strategy_config = self.config_manager.get(strategy_type.value)
         if not strategy_config:
             logging.info(f"INFO: No configuration found for strategy type: {strategy_type}.")
@@ -64,7 +72,8 @@ class InferencerLoader:
         if self._is_already_loaded(inferencer_key, model_name):
             return
 
-        self._load_and_register(inferencer_key, model_name, model_type)
+        self._load_and_register(inferencer_key, model_name, model_type, config_data)
+
 
 # TODO make it possible for the user to add strat and model dynamically. As long they based
 # on the baseclass it is okej.
