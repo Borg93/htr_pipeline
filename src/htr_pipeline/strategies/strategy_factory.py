@@ -9,7 +9,7 @@ class StrategyFactory:
     def __init__(self):
         self.strategies = {}
 
-    def register_strategy(self, strategy_name, strategy_class):
+    def register_custom_strategy(self, strategy_name, strategy_class):
         # Ensure the strategy_class is a subclass of Strategy
         if not issubclass(strategy_class, Strategy):
             raise TypeError("strategy_class must be a subclass of Strategy.")

@@ -1,10 +1,8 @@
 import logging
 
-from .config_manager import ConfigManager
-from .enums import ConfigKey, StrategyType
-from .inferencer.inferencer_factory import InferencerFactory
-from .models.model_factory import ModelFactory
-from .strategies.strategy_factory import PostprocessingStrategyFactory, PreprocessingStrategyFactory
+from config_manager import ConfigManager
+from inference_loader import InferencerLoader
+from inferencer.inferencer import InferencerProtocol
 
 
 # TODO - option to load from the hub and local.
@@ -16,92 +14,37 @@ class HTREngine:
         logging.basicConfig(level=logging.INFO)
         self.inferencers = {}
         self.config_manager = ConfigManager()
-        self.model_factory = ModelFactory()
-        self.inferencer_factory = InferencerFactory()
-        self.preprocessing_strategy_factory = PreprocessingStrategyFactory()
-        self.postprocessing_strategy_factory = PostprocessingStrategyFactory()
-
-    def push_to_hf_hub():
-        print("will load form the hub..")
-
-    def load_pipeline():
-        # TODO this one should load multiple models and also define their sequential
-        # on how they are supposed to be build and run. 
-        print("will load pipeline from config")
-
-    def load_model(self, folder_path):
-
-        # TODO should have simlair implmentation as bertopic? Should load from the hub or locally
-        # TODO think about SOLID. Single-responsibility principle.. THis class becomes now loader and inferencer. 
-        # Is there away to refactor away the setter as the config manager is validatior
-        try:
-            self.config_manager.read(folder_path)
-            model_name = self.config_manager.get(ConfigKey.MODEL_NAME.value)
-            model_type = self.config_manager.get(ConfigKey.MODEL_TYPE.value)
-
-            inferencer_key = self.get_inferencer_key(model_name, model_type)
-
-            # Check if we already have an inferencer for this configuration
-            if inferencer_key in self.inferencers:
-                logging.info(f"Configuration for model {model_name} already loaded, reusing existing inferencer.")
-                return
-            else:
-                logging.info(f"Loading {inferencer_key}.")
-
-
-            model = self.model_factory.create(model_name, model_type, folder_path)
-
-
-            preprocessing_strategies = self._create_strategies(StrategyType.PREPROCESSING)
-            postprocessing_strategies = self._create_strategies(StrategyType.POSTPROCESSING)
-
-            inferencer = self.inferencer_factory.create(model, preprocessing_strategies, postprocessing_strategies)
-            self.inferencers[inferencer_key] = inferencer
-
-        except Exception as e:
-            logging.error(f"Failed to load model: {str(e)}")
-
-    def _get_inferencer_key(self, model_name, model_type):
-        return f"{model_name}_{model_type}"
+        self.inferencer_loader = InferencerLoader(self.config_manager, self.inferencers)
 
     @property
     def inferencer_keys(self):
-        return list(self.inferencers.keys)
+        return list(self.inferencers.keys())
 
-    def _create_strategies(self, strategy_type: StrategyType):
-        if strategy_type == StrategyType.PREPROCESSING:
-            strategy_factory = PreprocessingStrategyFactory()
-        elif strategy_type == StrategyType.POSTPROCESSING:
-            strategy_factory = PostprocessingStrategyFactory()
-        else:
-            raise ValueError("Invalid strategy type")
+    def push_to_hf_hub(self):
+        raise NotImplementedError("The method to push to the hub is not implemented yet.")
 
-        strategy_config = self.config_manager.get(strategy_type.value)
+    def load_from_hf_hub(self):
+        raise NotImplementedError("The method to load from the hub is not implemented yet.")
 
-        if strategy_config:
-            strategies = []
-            for strategy in strategy_config:
-                strategies.append(strategy_factory.create(strategy, strategy_type.value))
-            return strategies
-        else:
-            logging.info(f"INFO: No configuration found for strategy type: {strategy_type}.")
+    def load_pipeline(self):
+        raise NotImplementedError("The method to load pipeline from config is not implemented yet.")
 
-        return []
+    def load_inferencer(self, folder_path):
+        self.inferencer_loader.load(folder_path)
 
-    def register_strategy(self, strategy_type, strategy_name, strategy_class):
-        if strategy_type == StrategyType.PREPROCESSING:
-            self.preprocessing_strategy_factory.register_strategy(strategy_name, strategy_class)
-        elif strategy_type == StrategyType.POSTPROCESSING:
-            self.postprocessing_strategy_factory.register_strategy(strategy_name, strategy_class)
-        else:
-            raise ValueError(f"Invalid strategy type: {strategy_type}")
+    def register_custom_strategy(self, strategy_type, strategy_name, strategy_class):
+        strategy_factory = self.inferencer_loader._get_strategy_factory(strategy_type)
+        strategy_factory.register_custom_strategy(strategy_name, strategy_class)
+
+    def register_custom_model():
+        raise NotImplementedError("The method to load custom models not implemented yet, should be simlair as register_custom_strategy.")
 
     def run_inference(self, inferencer_key, input_image):
         return self._run_inferencer(inferencer_key, input_image)
 
     def _run_inferencer(self, inferencer_key, input_image, visualize=False):
         try:
-            inferencer = self.inferencers[inferencer_key]
+            inferencer: InferencerProtocol = self.inferencers[inferencer_key]
             preprocessed = inferencer.preprocess(input_image)
             raw_output = inferencer.predict(preprocessed)
             processed_output = inferencer.postprocess(raw_output)
@@ -120,6 +63,6 @@ class HTREngine:
 
 if __name__ == "__main__":
     engine = HTREngine()
-    engine.load_model('./RmtDet')
+    engine.load_inferencer('./RmtDet')
     engine.run_inference('region', 'input_image.png')
-    engine.register_strategy(StrategyType.PREPROCESSING, "custom_binarize", CustomBinarize)
+    engine.register_custom_strategy("preprocessing", "custom_binarize", CustomBinarize)

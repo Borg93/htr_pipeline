@@ -29,10 +29,10 @@ class ConfigManager:
             logging.error(f"Failed to parse config file: {config_file_path}")
             raise
 
-    def get(self, key):
-        try:
-            return self.config_data[key]
-        except KeyError:
-            logging.error(f"Key not found in config data: {key}")
-            raise
+    def get(self, key, model_name=None, default_value=None):
+        config_data = self.configs[model_name] if model_name else self.config_data
+        return config_data.get(key, default_value)
 
+    def list_keys(self, model_name=None):
+        config_data = self.configs[model_name] if model_name else self.config_data
+        return list(config_data.keys())
