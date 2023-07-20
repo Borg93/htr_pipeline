@@ -3,6 +3,7 @@ import logging
 import os
 
 from config_manager import ConfigManager
+from enums import ConfigFile
 from inference_loader import InferencerLoader
 from inferencer.inferencer import InferencerProtocol
 
@@ -33,12 +34,12 @@ class HTREngine:
             self.inferencer_loader.load(config_data_or_path)
         elif isinstance(config_data_or_path, str):
             # If the input is a string, treat it as a folder path
-            config_file_path = os.path.join(config_data_or_path, 'config.json')
+            config_file_path = os.path.join(config_data_or_path, ConfigFile.CONFIG_JSON.value)
             with open(config_file_path, 'r') as file:
                 config_data = json.load(file)
             self.inferencer_loader.load(config_data)
         else:
-            raise TypeError("config_data_or_path must be a dictionary or a path to a folder containing a 'config.json' file.")
+            raise TypeError(f"config_data_or_path must be a dictionary or a path to a folder containing a '{ConfigFile.CONFIG_JSON.value}' file.")
 
 
     def run_inference(self, inferencer_key, input_image, visualize=False):

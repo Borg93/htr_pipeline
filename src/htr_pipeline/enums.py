@@ -9,6 +9,9 @@ class ConfigKey(Enum):
     POSTPROCESSING = 'postprocessing'
     VERBOSE = 'verbose'
 
+class ConfigFile(Enum):
+    CONFIG_JSON = 'config.json'
+
 
 class InferencerType(Enum):
     REGION = "region"
