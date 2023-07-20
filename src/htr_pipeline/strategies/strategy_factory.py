@@ -1,4 +1,6 @@
+from strategies.postprocess.simple_postprocessing import SimplePost
 from strategies.preprocess.simple_binarize import SimpleBinarize
+from strategies.strategy import Strategy
 
 from htr_pipeline.enums import StrategyName
 
@@ -6,6 +8,12 @@ from htr_pipeline.enums import StrategyName
 class StrategyFactory:
     def __init__(self):
         self.strategies = {}
+
+    def register_strategy(self, strategy_name, strategy_class):
+        # Ensure the strategy_class is a subclass of Strategy
+        if not issubclass(strategy_class, Strategy):
+            raise TypeError("strategy_class must be a subclass of Strategy.")
+        self.strategies[strategy_name] = strategy_class
 
     def create(self, strategy_name, strategy_type):
         strategy_class = self.strategies.get(strategy_name)
@@ -33,6 +41,6 @@ class PostprocessingStrategyFactory(StrategyFactory):
     def __init__(self):
         super().__init__()
         self.strategies = {
-            StrategyName.SIMPLE_POSTPROCESSING.value: SimplePostprocessing,
+            StrategyName.SIMPLE_POSTPROCESSING.value: SimplePost,
             # Add more as needed
         }

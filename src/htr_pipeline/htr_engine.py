@@ -69,13 +69,31 @@ class HTREngine:
         return list(self.inferencers.keys)
 
     def _create_strategies(self, strategy_type: StrategyType):
-        strategy_factory = (PreprocessingStrategyFactory()
-                            if strategy_type == StrategyType.PREPROCESSING
-                            else PostprocessingStrategyFactory())
+        if strategy_type == StrategyType.PREPROCESSING:
+            strategy_factory = PreprocessingStrategyFactory()
+        elif strategy_type == StrategyType.POSTPROCESSING:
+            strategy_factory = PostprocessingStrategyFactory()
+        else:
+            raise ValueError("Invalid strategy type")
+
         strategy_config = self.config_manager.get(strategy_type.value)
-        return [strategy_factory.create(strategy, strategy_type.value) for strategy in strategy_config] if strategy_config else []
 
+        if strategy_config:
+            strategies = []
+            for strategy in strategy_config:
+                strategies.append(strategy_factory.create(strategy, strategy_type.value))
+            return strategies
 
+        logging.info(f"No configuration found for strategy type: {strategy_type}.")
+        return []
+
+    def register_strategy(self, strategy_type, strategy_name, strategy_class):
+        if strategy_type == StrategyType.PREPROCESSING:
+            self.preprocessing_strategy_factory.register_strategy(strategy_name, strategy_class)
+        elif strategy_type == StrategyType.POSTPROCESSING:
+            self.postprocessing_strategy_factory.register_strategy(strategy_name, strategy_class)
+        else:
+            raise ValueError(f"Invalid strategy type: {strategy_type}")
 
     def run_inference(self, inferencer_key, input_image):
         return self._run_inferencer(inferencer_key, input_image)
@@ -103,3 +121,4 @@ if __name__ == "__main__":
     engine = HTREngine()
     engine.load_model('./RmtDet')
     engine.run_inference('region', 'input_image.png')
+    engine.register_strategy(StrategyType.PREPROCESSING, "custom_binarize", CustomBinarize)

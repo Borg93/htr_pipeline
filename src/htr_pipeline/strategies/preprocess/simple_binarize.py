@@ -1,19 +1,19 @@
 from strategies.strategy import Strategy
 
+from htr_pipeline.enums import StrategyName, StrategyType
+
 
 class SimpleBinarize(Strategy):
     def __init__(self):
-        self._strategy_type = "preprocessing"
-        self._strategy_name = "simplebinarize"
-
+        pass
 
     @property
     def strategy_name(self):
-        return self._strategy_name
+        return StrategyName.SIMPLE_BINARIZE.value
 
     @property
     def strategy_type(self):
-        return self._strategy_type
+        return StrategyType.PREPROCESSING.value
 
     def process(self, input_image):
         # Actual implementation of binarization goes here

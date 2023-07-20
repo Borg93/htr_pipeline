@@ -1,18 +1,20 @@
 from strategies.strategy import Strategy
 
+from htr_pipeline.enums import StrategyName, StrategyType
+
 
 class SimplePost(Strategy):
     def __init__(self):
-        self._strategy_type = "preprocessing"
-        self._strategy_name = "simplepost"
+        pass
 
     @property
     def strategy_name(self):
-        return self._strategy_name
+        return StrategyName.SIMPLE_POSTPROCESSING.value
 
     @property
     def strategy_type(self):
-        return self._strategy_type
+        return StrategyType.POSTPROCESSING.value
+
 
     def process(self, input_image):
         # Actual implementation of binarization goes here
