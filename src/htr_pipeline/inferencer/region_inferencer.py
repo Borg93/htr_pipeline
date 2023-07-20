@@ -1,3 +1,5 @@
+import logging
+
 from htr_pipeline.enums import InferencerType
 from htr_pipeline.inferencer.inferencer import Inferencer
 from htr_pipeline.inferencer.visualizers.region_visualizer import RegionVisualizer
@@ -11,9 +13,9 @@ class RegionInferencer(Inferencer):
         self.postprocess_strategies = postprocess_strategies or []
 
         if not self.preprocess_strategies:
-            print("Warning: No preprocess strategies provided.")
+            logging.info("INFO: No preprocess strategies provided.")
         if not self.postprocess_strategies:
-            print("Warning: No postprocess strategies provided.")
+            logging.info("INFO: No postprocess strategies provided.")
 
     @property
     def inferencer_type(self):

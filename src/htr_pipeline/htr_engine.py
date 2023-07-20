@@ -83,8 +83,9 @@ class HTREngine:
             for strategy in strategy_config:
                 strategies.append(strategy_factory.create(strategy, strategy_type.value))
             return strategies
+        else:
+            logging.info(f"INFO: No configuration found for strategy type: {strategy_type}.")
 
-        logging.info(f"No configuration found for strategy type: {strategy_type}.")
         return []
 
     def register_strategy(self, strategy_type, strategy_name, strategy_class):

@@ -14,18 +14,18 @@ class InferencerType(Enum):
     REGION = "region"
     # LINE = "line"
     # TRANSCRIBER = "transcriber"
-    # add other inferencer names as needed
 
 
 class ModelType(Enum):
     REGION = "region"
-    # add other model types as needed
 
 
 class ModelName(Enum):
+    """
+    add other model names as needed
+    """
     RMT_DET_REGION = "RmtDetRegion"
     TR_OCR = "TrOCR"
-    # add other model names as needed
 
 
 class StrategyType(Enum):
@@ -34,9 +34,11 @@ class StrategyType(Enum):
 
 
 class StrategyName(Enum):
+    """
+    add other strategy names as needed
+    """
     SIMPLE_BINARIZE = "simplebinarize"
     SIMPLE_POSTPROCESSING = "simplepost"
-    # add other strategy names as needed
 
 
 
