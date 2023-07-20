@@ -1,4 +1,4 @@
-from htr_pipeline.inferencer.region_inferencer import RegionInferencer
+from .region_inferencer import RegionInferencer
 
 
 class InferencerFactory:

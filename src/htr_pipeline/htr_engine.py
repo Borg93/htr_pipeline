@@ -66,7 +66,7 @@ class HTREngine:
 
 if __name__ == "__main__":
     engine = HTREngine()
-    engine.load_inferencer('./RmtDet')
-    engine.run_inference('region', 'input_image.png')
-    engine.inferencer_loader.register_custom_strategy("preprocessing", "custom_binarize", CustomBinarize)
-    engine.inferencer_loader.register_custom_model(model_name, model_class)
+    engine.load_inferencer('/workspaces/htr_pipeline/notebooks/RmtDet') 
+    # engine.run_inference('region', 'input_image.png')
+    # engine.inferencer_loader.register_custom_strategy("preprocessing", "custom_binarize", CustomBinarize)
+    # engine.inferencer_loader.register_custom_model(model_name, model_class)
