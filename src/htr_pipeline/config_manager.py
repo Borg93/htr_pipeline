@@ -1,33 +1,24 @@
 import json
 import logging
-import os
 
 
 class ConfigManager:
-    def __init__(self):
+    def __init__(self, config_dict=None):
         self.configs = {}  # Store configs by their model_name
 
-    def read(self, folder_path):
-        try:
-            config_file_path = os.path.join(folder_path, 'config.json')
+        if config_dict is not None:
+            self.add_config(config_dict)
 
-            with open(config_file_path) as config_file:
-                new_config = json.load(config_file)
-                model_name = new_config.get('model_name')
+    def add_config(self, config_dict):
+        model_name = config_dict.get('model_name')
 
-                if model_name in self.configs:
-                    if self.configs[model_name] != new_config:
-                        raise ValueError(f"Model name {model_name} is already used with a different configuration.")
-                else:
-                    self.configs[model_name] = new_config
+        if model_name in self.configs:
+            if self.configs[model_name] != config_dict:
+                raise ValueError(f"Model name {model_name} is already used with a different configuration.")
+        else:
+            self.configs[model_name] = config_dict
 
-                self.config_data = new_config
-        except FileNotFoundError:
-            logging.error(f"Config file not found: {config_file_path}")
-            raise
-        except json.JSONDecodeError:
-            logging.error(f"Failed to parse config file: {config_file_path}")
-            raise
+        self.config_data = config_dict
 
     def get(self, key, model_name=None, default_value=None):
         config_data = self.configs[model_name] if model_name else self.config_data
@@ -36,3 +27,21 @@ class ConfigManager:
     def list_keys(self, model_name=None):
         config_data = self.configs[model_name] if model_name else self.config_data
         return list(config_data.keys())
+
+    def load_from_file(self, filepath):
+        with open(filepath, 'r') as file:
+            config_dict = json.load(file)
+        self.add_config(config_dict)
+
+
+if __name__ == "__main__":
+    config_dict = {
+        "model_name": "RmtDetRegion",
+        "model_hf": "Riksarkivet/HTR_pipeline_models",
+        "model_type": "region",
+        "preprocessing": ["simplebinarize", "resize"],
+        "postprocessing": "simplepostprocessing",
+        "verbose": True
+    }
+    config_manager = ConfigManager(config_dict)
+

@@ -27,6 +27,12 @@ class ModelName(Enum):
     RMT_DET_REGION = "RmtDetRegion"
     TR_OCR = "TrOCR"
 
+class ModelFormat(Enum):
+    """
+    add other model formats as needed
+    """
+    PYTORCH = "model.pth"
+
 
 class StrategyType(Enum):
     PREPROCESSING = 'preprocessing'

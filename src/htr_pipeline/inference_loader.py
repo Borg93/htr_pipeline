@@ -25,9 +25,9 @@ class InferencerLoader:
         logging.info(f"Loading {inferencer_key}.")
         return False
 
-    def _load_and_register(self, inferencer_key, model_name, model_type, folder_path):
+    def _load_and_register(self, inferencer_key, model_name, model_type):
         try:
-            model = self.model_factory.create(model_name, model_type, folder_path)
+            model = self.model_factory.create(model_name, model_type)
             preprocessing_strategies = self._create_strategies(StrategyType.PREPROCESSING)
             postprocessing_strategies = self._create_strategies(StrategyType.POSTPROCESSING)
 
@@ -54,8 +54,8 @@ class InferencerLoader:
         else:
             raise ValueError("Invalid strategy type")
 
-    def load(self, folder_path):
-        self.config_manager.read(folder_path)
+    def load(self, config_data):
+        self.config_manager.add_config(config_data)
         model_name = self.config_manager.get(ConfigKey.MODEL_NAME.value)
         model_type = self.config_manager.get(ConfigKey.MODEL_TYPE.value)
 
@@ -64,4 +64,14 @@ class InferencerLoader:
         if self._is_already_loaded(inferencer_key, model_name):
             return
 
-        self._load_and_register(inferencer_key, model_name, model_type, folder_path)
+        self._load_and_register(inferencer_key, model_name, model_type)
+
+# TODO make it possible for the user to add strat and model dynamically. As long they based
+# on the baseclass it is okej.
+    def register_custom_strategy(self, strategy_type, strategy_name, strategy_class):
+        strategy_factory = self._get_strategy_factory(strategy_type)
+        strategy_factory.register_custom_strategy(strategy_name, strategy_class)
+
+    def register_custom_model(self, model_name, model_type, model_class):
+        self.model_factory.register_custom_model(model_name, model_type, model_class)
+

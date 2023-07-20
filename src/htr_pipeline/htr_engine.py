@@ -1,13 +1,11 @@
+import json
 import logging
+import os
 
 from config_manager import ConfigManager
 from inference_loader import InferencerLoader
 from inferencer.inferencer import InferencerProtocol
 
-
-# TODO - option to load from the hub and local.
-# IDEA : We should be able to pass a model but additonal configurations as strategies and type of inferencer it was should be able to be saved and seralized 
-# and be push to the hub. Perhaps simlair as bertopic implmetnation?
 
 class HTREngine:
     def __init__(self):
@@ -29,15 +27,19 @@ class HTREngine:
     def load_pipeline(self):
         raise NotImplementedError("The method to load pipeline from config is not implemented yet.")
 
-    def load_inferencer(self, folder_path):
-        self.inferencer_loader.load(folder_path)
+    def load_inferencer(self, config_data_or_path):
+        if isinstance(config_data_or_path, dict):
+            # If the input is a dictionary
+            self.inferencer_loader.load(config_data_or_path)
+        elif isinstance(config_data_or_path, str):
+            # If the input is a string, treat it as a folder path
+            config_file_path = os.path.join(config_data_or_path, 'config.json')
+            with open(config_file_path, 'r') as file:
+                config_data = json.load(file)
+            self.inferencer_loader.load(config_data)
+        else:
+            raise TypeError("config_data_or_path must be a dictionary or a path to a folder containing a 'config.json' file.")
 
-    def register_custom_strategy(self, strategy_type, strategy_name, strategy_class):
-        strategy_factory = self.inferencer_loader._get_strategy_factory(strategy_type)
-        strategy_factory.register_custom_strategy(strategy_name, strategy_class)
-
-    def register_custom_model():
-        raise NotImplementedError("The method to load custom models not implemented yet, should be simlair as register_custom_strategy.")
 
     def run_inference(self, inferencer_key, input_image, visualize=False):
         return self._run_inferencer(inferencer_key, input_image, visualize)
@@ -65,4 +67,5 @@ if __name__ == "__main__":
     engine = HTREngine()
     engine.load_inferencer('./RmtDet')
     engine.run_inference('region', 'input_image.png')
-    engine.register_custom_strategy("preprocessing", "custom_binarize", CustomBinarize)
+    engine.inferencer_loader.register_custom_strategy("preprocessing", "custom_binarize", CustomBinarize)
+    engine.inferencer_loader.register_custom_model(model_name, model_class)
