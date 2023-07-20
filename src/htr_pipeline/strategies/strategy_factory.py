@@ -1,8 +1,7 @@
-from strategies.postprocess.simple_postprocessing import SimplePost
-from strategies.preprocess.simple_binarize import SimpleBinarize
-from strategies.strategy import Strategy
-
 from htr_pipeline.enums import StrategyName
+from htr_pipeline.strategies.postprocess.simple_postprocessing import SimplePost
+from htr_pipeline.strategies.preprocess.simple_binarize import SimpleBinarize
+from htr_pipeline.strategies.strategy import Strategy
 
 
 class StrategyFactory:

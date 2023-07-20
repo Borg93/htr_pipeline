@@ -2,10 +2,10 @@ import json
 import logging
 import os
 
-from config_manager import ConfigManager
-from enums import ConfigFile
-from inference_loader import InferencerLoader
-from inferencer.inferencer import InferencerProtocol
+from htr_pipeline.config_manager import ConfigManager
+from htr_pipeline.enums import ConfigFile
+from htr_pipeline.inference_loader import InferencerLoader
+from htr_pipeline.inferencer.inferencer import InferencerProtocol
 
 
 class HTREngine:

@@ -1,9 +1,9 @@
 import logging
 
-from enums import ConfigKey, StrategyType
-from inferencer.inferencer_factory import InferencerFactory
-from models.model_factory import ModelFactory
-from strategies.strategy_factory import PostprocessingStrategyFactory, PreprocessingStrategyFactory
+from htr_pipeline.enums import ConfigKey, StrategyType
+from htr_pipeline.inferencer.inferencer_factory import InferencerFactory
+from htr_pipeline.models.model_factory import ModelFactory
+from htr_pipeline.strategies.strategy_factory import PostprocessingStrategyFactory, PreprocessingStrategyFactory
 
 
 class InferencerLoader:
