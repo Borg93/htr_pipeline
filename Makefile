@@ -2,8 +2,8 @@ include .env
 
 VENV = venv
 PYTHON = $(VENV)/Scripts/python
-REPO_URL = https://Riksarkivet/htr_pipeline
-PACKAGE = htr_pipeline
+REPO_URL = https://Riksarkivet/htr
+PACKAGE = htr
 PIP = $(VENV)/Scripts/pip
 ACTIVATE_ENV = . venv/bin/activate
 
@@ -46,8 +46,8 @@ venv:
 
 ## new_env_conda - Create and setup new conda environment from environment.yml file
 new_env_conda:
-	@if conda env list | grep -q htr_pipeline; then \
-		conda env remove --name htr_pipeline; \
+	@if conda env list | grep -q htr; then \
+		conda env remove --name htr; \
 	fi
 	conda env create -f environment.yml
 

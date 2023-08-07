@@ -1,23 +1,25 @@
 .
+├── LICENSE
+├── MANIFEST.in
+├── Makefile
 ├── docker
 │   └── Dockerfile
 ├── docs
+│   ├── CONTRIBUTING.md
+│   ├── README.md
 │   ├── api.md
 │   ├── changelog.md
-│   ├── CONTRIBUTING.md
-│   ├── images
-│   │   └── riks.png
-│   └── README.md
+│   └── images
+│       └── riks.png
 ├── enviroment.yml
-├── LICENSE
-├── Makefile
-├── MANIFEST.in
 ├── mkdocs.yml
 ├── notebooks
+│   └── test.ipynb
 ├── output.txt
+├── project_structure.txt
 ├── pyproject.toml
-├── requirements_dev.txt
 ├── requirements.txt
+├── requirements_dev.txt
 ├── setup.py
 ├── src
 │   └── htr
@@ -25,8 +27,9 @@
 │       │   └── I_will_be_included_in_MANIFEST.txt
 │       ├── htr_engine.py
 │       ├── inferencer
-│       │   ├── inferencer.py
 │       │   ├── __init__.py
+│       │   ├── inferencer.py
+│       │   ├── inferencer_factory.py
 │       │   ├── line_inferencer.py
 │       │   ├── old_inferencer.py
 │       │   ├── region_inferencer.py
@@ -43,7 +46,7 @@
 │       │   │   ├── huggingface_model.py
 │       │   │   └── trocr.py
 │       │   ├── __init__.py
-│       │   ├── model_factory.py
+│       │   ├── lines
 │       │   ├── model.py
 │       │   └── openmmlab
 │       │       ├── openmmlab_model.py
@@ -56,8 +59,8 @@
 └── tests
     ├── integration
     └── unit
-        ├── conftest.py
         ├── __init__.py
+        ├── conftest.py
         └── test_main.py
 
 17 directories, 43 files

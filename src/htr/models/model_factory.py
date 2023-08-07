@@ -1,5 +1,5 @@
-from htr_pipeline.models.huggingface.trocr import TrOCR
-from htr_pipeline.models.openmmlab.rmdet_region import RmtDetRegion
+from htr.models.huggingface.trocr import TrOCR
+from htr.models.openmmlab.rmdet_region import RmtDetRegion
 
 
 class ModelFactory:

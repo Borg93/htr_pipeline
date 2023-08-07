@@ -1,0 +1,8 @@
+{
+    "model_name": "RmtDetRegion",
+    "model_hf": "Riksarkivet/HTR_pipeline_models",
+    "model_type": "region",
+    "preprocessing": "simplebinarize",
+    "postprocessing": "simplepost",
+    "verbose": true
+}

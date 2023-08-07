@@ -1,4 +1,4 @@
-from htr_pipeline.models.model import Model
+from htr.models.model import Model
 
 
 class HuggingFaceModel(Model):
