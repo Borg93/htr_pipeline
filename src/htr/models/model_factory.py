@@ -24,7 +24,7 @@ class HuggingFaceModelFactory:
     def __init__(self):
         self.models = {
             'TrOCR': TrOCR,
-            'modelB': HuggingFaceModelB
+            # 'modelB': HuggingFaceModelB
             # add more as needed
         }
     
@@ -39,10 +39,10 @@ class OpenMMLabModelFactory:
     def __init__(self):
         self.models = {
             'RmtDetRegion': RmtDetRegion,
-            'modelB': OpenMMLabModelB
+            # 'modelB': OpenMMLabModelB
             # add more as needed
         }
-    
+
     def create(self, model_name):
         if model_name not in self.models:
             raise ValueError(f"Unknown HuggingFace model: {model_name}")

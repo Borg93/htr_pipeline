@@ -1,9 +1,10 @@
 import configparser
 import logging
 
-from .inferencer.line_inferencer import LineInferencer
+# from .inferencer.line_inferencer import LineInferencer
 from .inferencer.region_inferencer import RegionInferencer
-from .inferencer.transcriber_inferencer import TranscriberInferencer
+
+# from .inferencer.transcriber_inferencer import TranscriberInferencer
 from .models.model_factory import ModelFactory
 from .visualizers.visualizer_factory import VisualizerFactory
 
@@ -34,7 +35,7 @@ class HTREngine:
 
     # Add set_line_model and set_transcriber_model methods similarly
 
-    def run_region_inference(self, input_image):
+    def run_region_inference(self, input_image, visualize=False):
         return self._run_inferencer('region', input_image)
 
     # Add run_line_inference and run_transcriber_inference methods similarly
@@ -44,7 +45,7 @@ class HTREngine:
             preprocessed = self.inferencers[inferencer_key].preprocess(input_image)
             raw_output = self.inferencers[inferencer_key].predict(preprocessed)
             processed_output = self.inferencers[inferencer_key].postprocess(raw_output)
-            self.inferencers[inferencer_key].visualize()
+            # self.inferencers[inferencer_key].visualize()
             return processed_output
 
         except Exception as e:

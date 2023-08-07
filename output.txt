@@ -20,7 +20,7 @@
 ├── requirements.txt
 ├── setup.py
 ├── src
-│   └── htr_pipeline
+│   └── htr
 │       ├── asset
 │       │   └── I_will_be_included_in_MANIFEST.txt
 │       ├── htr_engine.py
@@ -28,21 +28,26 @@
 │       │   ├── inferencer.py
 │       │   ├── __init__.py
 │       │   ├── line_inferencer.py
+│       │   ├── old_inferencer.py
 │       │   ├── region_inferencer.py
 │       │   ├── transcriber_inferencer.py
 │       │   └── utils
-│       │       └── __init__.py
+│       │       ├── binarize.py
+│       │       ├── decorator_timer.py
+│       │       ├── __init__.py
+│       │       └── templates
+│       │           └── page_xml_2013.xml
 │       ├── __init__.py
 │       ├── models
 │       │   ├── huggingface
-│       │   │   ├── hugginface_model_a.py
-│       │   │   └── huggingface_model.py
+│       │   │   ├── huggingface_model.py
+│       │   │   └── trocr.py
 │       │   ├── __init__.py
 │       │   ├── model_factory.py
 │       │   ├── model.py
 │       │   └── openmmlab
-│       │       ├── openmmlab_model_a.py
-│       │       └── openmmlab_model.py
+│       │       ├── openmmlab_model.py
+│       │       └── rmdet_region.py
 │       ├── py.typed
 │       └── visualizers
 │           ├── __init__.py
@@ -55,4 +60,4 @@
         ├── __init__.py
         └── test_main.py
 
-16 directories, 39 files
+17 directories, 43 files

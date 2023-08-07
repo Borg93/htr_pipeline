@@ -1,5 +1,3 @@
-.ONESHELL:
-
 include .env
 
 VENV = venv
@@ -7,36 +5,18 @@ PYTHON = $(VENV)/Scripts/python
 REPO_URL = https://Riksarkivet/htr_pipeline
 PACKAGE = htr_pipeline
 PIP = $(VENV)/Scripts/pip
-ACTIVATE_ENV = source venv/Scripts/activate
-#windows :  .\venv\Scripts\activate #./venv/Scripts/activate
-# linux, mac : source venv/Scripts/activate
+ACTIVATE_ENV = . venv/bin/activate
 
+.PHONY: help connect_to_repo release pre_commit venv local_install test_install local_dev_install \
+        tests-unit mock-tests-unit tests-integration build local_build clean_venv local_clean_windows \
+        local_clean_linux docker_build docs_install new_env_conda install open_local_install \
+        install_openmmlab_with_mim install_openmmlab
+
+## help - Display this help screen
 help:
-	@echo make connect_to_repo   - Connects local repo to github repo with the same name as the repo locally
-	@echo make release           - provide tag and later push to origin
-	@echo _
-	@echo make venv              - Creates a venv, however, needs to be activated before use 
-	@echo                          #windows: .\venv\Scripts\activate #./venv/Scripts/activate #linux mac : source venv/Scripts/activate
-	@echo _
-	@echo make local_install     - Installs python packages
-	@echo make local_dev_install - Installs dev package to test code
-	@echo _
-	@echo make pre_commit        - Precommit hooks before git pushes, to format code before push 
-	@echo _
-	@echo make tests-unit        - Runs unit test and make tests-integration for you integration tests..
-	@echo make lint              - Runs mypy and flake8
-	@echo make test_tox          - Runs make lint and make test
-	@echo _
-	@echo make build             - Build python package
-	@echo _
-	@echo make clean_venv        - Removes Local venv 
-	@echo make local_clean       - local_clean_windows/linux.. Removes Local folders such as .pytest_cache and other cache files..  
-	@echo make local_build       - Combines make build and local_clean
-	@echo _
-	@echo make docker_build		 - docker build locally and run container
-	@echo _
-	@echo make docs_install      - install requirements for mkdocs
+	@grep -h "##" $(MAKEFILE_LIST) | grep -v grep | sed -e 's/\\$$//' -e 's/##//'
 
+## connect_to_repo - Connects local repo to github repo with the same name as the repo locally
 connect_to_repo:
 	git init .
 	git add --all
@@ -45,74 +25,100 @@ connect_to_repo:
 	git remote add origin $(REPO_URL)
 	git push -u origin main
 
-# Make release
+## release - Release a new version
 release:
 	@echo git tag -a "vX.Y.Z" -m "Release X.Y.Z"
 	@echo git push origin vX.Y.Z
 	@echo change release vX.Y.Z in setup.py..
 
-# Run only once..
+## pre_commit - Setup pre-commit hooks
 pre_commit:
 	$(PIP) install pre-commit
 	pre-commit --version
 	pre-commit install
 	pre-commit run
 
-# For local dev..
-.PHONY: venv
+## venv - Creates a venv, however, needs to be activated before use
 venv:
 	python -m venv $(VENV)
 	$(ACTIVATE_ENV)
 
+
+## new_env_conda - Create and setup new conda environment from environment.yml file
+new_env_conda:
+	@if conda env list | grep -q htr_pipeline; then \
+		conda env remove --name htr_pipeline; \
+	fi
+	conda env create -f environment.yml
+
+## local_install - Installs python packages
 local_install:
-	@echo _
-	@echo Installing python packages...
 	$(PIP) install -e .
 
+
+## install - Install requirements
+install: open_local_install install_openmmlab
+
+## install_mim - Install requirements with mim
+install_mim: open_local_install install_openmmlab_with_mim
+
+## open_local_install - Run requirements install
+open_local_install:
+	pip install --upgrade pip
+	pip install -r requirements.txt
+
+## install_openmmlab_with_mim - Run Openmmlab requirements install with mim
+install_openmmlab_with_mim:
+	pip install -U openmim
+	mim install mmengine
+	mim install mmcv
+	mim install mmdet
+	mim install mmocr
+
+## install_openmmlab - Run Openmmlab requirements install
+install_openmmlab:
+	pip install mmengine
+	pip install mmcv
+	pip install mmdet
+	pip install mmocr
+
+## test_install - Installs python packages for testing
 test_install:
-	@echo _
-	@echo Installing python packages...
 	pip install -e .
 	pip install -r requirements_dev.txt
 
-# For tests
+## local_dev_install - Install dev packages to test code
 local_dev_install:
 	$(PIP) install -r requirements_dev.txt
 
-.PHONY: test
+## tests-unit - Runs unit tests
 tests-unit: local_dev_install
 	pytest tests/unit -v
 
+## mock-tests-unit - Mock unit tests
 mock-tests-unit:
 	pytest tests/unit -v
 
+## tests-integration - Run integration tests
 tests-integration:
 	pytest test/integration
 
-lint:
-	mypy src
-	flake8 src
-
-test_tox:
-	tox
-
-# To build
-local_build: build local_clean
-	
+## build - Build python package
 build:
 	@echo "Building package"
 	pip install build
 	python -m build
 
-# Clean local dev
+## local_build - Build python package and remove cache files
+local_build: build local_clean
+
+## clean_venv - Removes Local venv and cache files
 clean_venv: local_clean
-	@echo "Cleaning previous python virtual environment..."
 	deactivate
 	rm -rf $(VENV)
 
-.PHONY: local_clean
+## local_clean_windows - Clean local folders for windows
 local_clean_windows:
-	@echo "Cleaning local folders:"
 	if exist "dist" rmdir /S dist
 	if exist ".pytest_cache" rmdir /S .pytest_cache
 	if exist ".mypy_cache" rmdir /S .mypy_cache
@@ -122,6 +128,7 @@ local_clean_windows:
 	if exist "tests\unit\__pycache__" rmdir /S tests\unit\__pycache__
 	if exist ".coverage" del .coverage
 
+## local_clean_linux - Clean local folders for linux
 local_clean_linux:
 	rm -r dist
 	rm -r .pytest_cache
@@ -132,11 +139,12 @@ local_clean_linux:
 	rm -r tests/unit/__pycache__
 	rm .coverage
 
+## docker_build - Build and run docker container
 docker_build:
 	docker build -t ${PACKAGE} .
 	docker run ${PACKAGE}
-	@echo dont forget to remove image or rebuild it..
 
+## docs_install - Install requirements for mkdocs
 docs_install:
 	pip install 'mkdocs ==1.4.2'
 	pip install 'mkdocs-material >=8.0.0'
@@ -144,36 +152,3 @@ docs_install:
 	pip install 'mkdocstrings>=0.20.0'
 	pip install 'mkdocstrings-python >= 0.8'
 
-new_env_conda:
-	conda env remove --name htr_pipeline
-	conda create -n htr_pipeline python=3.9
-	conda activate htr_pipeline
-	pip install -r requirements.txt
-
-
-
-####
-
-install: open_local_install install_openmmlab
-
-docker_install: open_local_install install_openmmlab_with_mim
-
-open_local_install:
-	@echo "Running requirements install"
-	pip install --upgrade pip
-	pip install -r requirements.txt
-
-install_openmmlab_with_mim:
-	@echo "Running Openmmlab requirements install"
-	pip install -U openmim
-	mim install mmengine
-	mim install mmcv
-	mim install mmdet
-	mim install mmocr
-
-install_openmmlab:
-	@echo "Running Openmmlab requirements install"
-	pip install mmengine
-	pip install mmcv
-	pip install mmdet
-	pip install mmocr

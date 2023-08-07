@@ -5,22 +5,22 @@ hide:
 
 <img src="images/riks.png" width="20%" height="20%" align="right" />
 
-# **htr_pipeline**
+# **htr**
 
 The HTR (Handwritten Text Recognition) Pipeline is a package that takes an image as input, runs preprocessing algorithms, feeds it into an inference engine, and outputs the results in either XML or JSON format. The inference engine can use models from a variety of third-party libraries such as OpenMMLab, Hugging Face, or others.
 
-![Test Python 🐍 package ](https://github.com/Riksarkivet/htr_pipeline/actions/workflows/tests.yml/badge.svg)
-[![Publish Python 🐍 distributions 📦 to PyPI](https://github.com/Riksarkivet/htr_pipeline/actions/workflows/release.yml/badge.svg)](https://github.com/Riksarkivet/htr_pipeline/actions/workflows/release.yml)
-[![Automatic generating docs for 📦](https://github.com/Riksarkivet/htr_pipeline/actions/workflows/docs.yml/badge.svg)](https://github.com/Riksarkivet/htr_pipeline/actions/workflows/docs.yml)
-[![PyPI - License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/Riksarkivet/htr_pipeline/blob/master/LICENSE)
-[![PyPI - Python](https://img.shields.io/badge/python-3.7%20|%203.8%20|%203.9-blue.svg)](https://pypi.org/project/htr_pipeline/)
+![Test Python 🐍 package ](https://github.com/Riksarkivet/htr/actions/workflows/tests.yml/badge.svg)
+[![Publish Python 🐍 distributions 📦 to PyPI](https://github.com/Riksarkivet/htr/actions/workflows/release.yml/badge.svg)](https://github.com/Riksarkivet/htr/actions/workflows/release.yml)
+[![Automatic generating docs for 📦](https://github.com/Riksarkivet/htr/actions/workflows/docs.yml/badge.svg)](https://github.com/Riksarkivet/htr/actions/workflows/docs.yml)
+[![PyPI - License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/Riksarkivet/htr/blob/master/LICENSE)
+[![PyPI - Python](https://img.shields.io/badge/python-3.7%20|%203.8%20|%203.9-blue.svg)](https://pypi.org/project/htr/)
 
 ## **Installation**
 
-Installation can be done using [pypi](https://pypi.org/project/htr_pipeline/):
+Installation can be done using [pypi](https://pypi.org/project/htr/):
 
 ```
-pip install htr_pipeline
+pip install htr
 ```
 
 ## Key Features

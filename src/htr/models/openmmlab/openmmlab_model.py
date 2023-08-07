@@ -1,9 +1,11 @@
+import torch
+
 from htr_pipeline.models.model import Model
 
 
-class OpenMMLabModelA(Model):
-    def __init__(self, model_name):
-        pass
+class OpenMMLabModel(Model):
+    def __init__(self):
+        self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
         # Load the Hugging Face model here
 
     def preprocess(self, input):

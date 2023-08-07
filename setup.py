@@ -41,7 +41,7 @@ with open(test_packages_path) as test_packages_path_file:
 
 
 # METADATA
-DISTNAME = "htr_pipeline"
+DISTNAME = "htr"
 DESCRIPTION = "short description of project."
 
 with open("docs/README.md", "r", encoding="utf-8") as f:
@@ -49,7 +49,7 @@ with open("docs/README.md", "r", encoding="utf-8") as f:
 
 MAINTAINER = "Riksarkivet"
 LICENSE = "MIT"
-PROJECT_URL = "https://Riksarkivet/htr_pipeline"
+PROJECT_URL = "https://Riksarkivet/htr"
 
 def setup_package():
     setup(
@@ -73,7 +73,7 @@ def setup_package():
         install_requires=base_packages,
         include_package_data=True,
         package_dir={"": "src"},
-        packages=find_packages(where="src", include=["htr_pipeline*"]),
+        packages=find_packages(where="src", include=["htr*"]),
         package_data={DISTNAME: ["py.typed"]},
         extras_require={"tests": test_packages},
         data_files=[("requirements", ["requirements.txt", "requirements_dev.txt"])],

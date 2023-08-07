@@ -1,2 +1,2 @@
-include src/htr_pipeline/assets/*.txt
+include src/htr/assets/*.txt
 include ./README.md

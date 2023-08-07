@@ -6,7 +6,7 @@ COPY . .
 
 RUN pip install -e .
 
-CMD [ "python3", "./src/htr_pipeline/main.py"]
+CMD [ "python3", "./src/htr/main.py"]
 
 # Commands:
 # Build a docker image:

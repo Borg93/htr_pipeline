@@ -1,10 +1,13 @@
 
-from htr_pipeline.models.huggingface.huggingface_model import HuggingFaceModel
+from mmocr.apis import TextRecInferencer
+
+from htr_pipeline.models.openmmlab.openmmlab_model import OpenMMLabModel
 
 
-class RmtDetRegion(HuggingFaceModel):
+class SatrnTranscriber(OpenMMLabModel):
     def __init__(self, model_name):
         super().__init__(model_name)
+        self.inferencer = TextRecInferencer(self.mmocr_config, self.mmocr_checkpoint, device=self.device)
 
     def preprocess(self, input):
         # Implement preprocessing specific to ModelA

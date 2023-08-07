@@ -1,11 +1,11 @@
 # Project information
-site_name: "htr_pipeline"
-site_url: https://Riksarkivet.github.io/htr_pipeline
+site_name: "htr"
+site_url: https://Riksarkivet.github.io/htr
 site_author: "Riksarkivet"
 site_description: >-
   Work in progress ...
-repo_name: Riksarkivet/htr_pipeline
-repo_url: https://Riksarkivet/htr_pipeline
+repo_name: Riksarkivet/htr
+repo_url: https://Riksarkivet/htr
 
 # Copyright
 copyright: Copyright &copy; 2023 Riksarkivet

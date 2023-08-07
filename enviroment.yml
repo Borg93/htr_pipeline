@@ -1,4 +1,4 @@
-name: htr_pipeline
+name: htr
 channels:
   - defaults
 dependencies:
