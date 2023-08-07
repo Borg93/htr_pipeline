@@ -11,7 +11,7 @@ class InferencerFactory:
         }
 
     def create(self, model, preprocessing_strategies, postprocessing_strategies):
-        model_type = model.get_model_type()
+        model_type = model.model_type
 
         if model_type not in self.inferencers:
             raise ValueError(f"Unknown model type: {model_type}")

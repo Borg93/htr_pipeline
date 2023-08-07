@@ -1,12 +1,12 @@
-from htr.enums import ModelType
+from htr.enums import ModelName
 from htr.models.model import Model
-from htr.models.region.rmtDet_region import RmtDetRegion
+from htr.models.region.rmdet_region import RmtDetRegion
 
 
 class ModelFactory:
     def __init__(self):
         self.models = {
-            ModelType.RMTDET.value: RmtDetRegion,
+            ModelName.RMT_DET_REGION.value: RmtDetRegion,
             # Add more as needed
         }
 
@@ -20,7 +20,7 @@ class ModelFactory:
         if not model_class:
             raise ValueError(f"Invalid model name: {model_name}")
 
-        model = model_class()
+        model = model_class(config_data)
         if model.model_type != model_type:
             raise ValueError(f"Model type mismatch: model {model_name} is not of type {model_type}")
 

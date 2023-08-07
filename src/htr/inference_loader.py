@@ -43,19 +43,19 @@ class InferencerLoader:
     def _load_and_register(self, inferencer_key, model_name, model_type, config_data):
         try:
             model = self.model_factory.create(model_name, model_type, config_data)
-            preprocessing_strategies = self._create_strategies(StrategyType.PREPROCESSING, config_data)
-            postprocessing_strategies = self._create_strategies(StrategyType.POSTPROCESSING, config_data)
+
+            preprocessing_strategies = self._create_strategies(StrategyType.PREPROCESSING) #config_data
+            postprocessing_strategies = self._create_strategies(StrategyType.POSTPROCESSING)  #config_data
 
             inferencer = self.inferencer_factory.create(model, preprocessing_strategies, postprocessing_strategies)
             self.inferencers[inferencer_key] = inferencer
+
         except Exception as e:
             logging.error(f"Failed to load model: {str(e)}")
 
     def _create_strategies(self, strategy_type: StrategyType):
         strategy_factory = self._get_strategy_factory(strategy_type)
 
-        print("strategy_factory: ", strategy_factory)
-        
         strategy_config = self.config_manager.get(strategy_type.value)
         if not strategy_config:
             logging.info(f"INFO: No configuration found for strategy type: {strategy_type}.")
@@ -71,7 +71,7 @@ class InferencerLoader:
         else:
             raise ValueError("Invalid strategy type")
 
-    
+
 
 
 # TODO make it possible for the user to add strat and model dynamically. As long they based
