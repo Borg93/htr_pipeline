@@ -1,9 +1,12 @@
 import logging
 
-from htr_pipeline.enums import ConfigKey, StrategyType
-from htr_pipeline.inferencer.inferencer_factory import InferencerFactory
-from htr_pipeline.models.model_factory import ModelFactory
-from htr_pipeline.strategies.strategy_factory import PostprocessingStrategyFactory, PreprocessingStrategyFactory
+from htr.enums import ConfigKey, StrategyType
+from htr.inferencer.inferencer_factory import InferencerFactory
+from htr.models.model_factory import ModelFactory
+from htr.strategies.strategy_factory import (
+    PostprocessingStrategyFactory,
+    PreprocessingStrategyFactory,
+)
 
 
 class InferencerLoader:
@@ -24,20 +27,26 @@ class InferencerLoader:
             return True
         logging.info(f"Loading {inferencer_key}.")
         return False
+    
+    def load(self, config_data):
+        self.config_manager.add_config(config_data)
+        model_name = self.config_manager.get(ConfigKey.MODEL_NAME.value)
+        model_type = self.config_manager.get(ConfigKey.MODEL_TYPE.value)
+
+        inferencer_key = self._get_inferencer_key(model_name, model_type)
+
+        if self._is_already_loaded(inferencer_key, model_name):
+            return
+
+        self._load_and_register(inferencer_key, model_name, model_type, config_data)
 
     def _load_and_register(self, inferencer_key, model_name, model_type, config_data):
         try:
             model = self.model_factory.create(model_name, model_type, config_data)
-            print(model)
-
-            preprocessing_strategies = self._create_strategies(StrategyType.PREPROCESSING)
-            postprocessing_strategies = self._create_strategies(StrategyType.POSTPROCESSING)
-            print(preprocessing_strategies)
+            preprocessing_strategies = self._create_strategies(StrategyType.PREPROCESSING, config_data)
+            postprocessing_strategies = self._create_strategies(StrategyType.POSTPROCESSING, config_data)
 
             inferencer = self.inferencer_factory.create(model, preprocessing_strategies, postprocessing_strategies)
-
-            print(inferencer)
-
             self.inferencers[inferencer_key] = inferencer
         except Exception as e:
             logging.error(f"Failed to load model: {str(e)}")
@@ -62,17 +71,7 @@ class InferencerLoader:
         else:
             raise ValueError("Invalid strategy type")
 
-    def load(self, config_data):
-        self.config_manager.add_config(config_data)
-        model_name = self.config_manager.get(ConfigKey.MODEL_NAME.value)
-        model_type = self.config_manager.get(ConfigKey.MODEL_TYPE.value)
-
-        inferencer_key = self._get_inferencer_key(model_name, model_type)
-
-        if self._is_already_loaded(inferencer_key, model_name):
-            return
-
-        self._load_and_register(inferencer_key, model_name, model_type, config_data)
+    
 
 
 # TODO make it possible for the user to add strat and model dynamically. As long they based
@@ -83,4 +82,3 @@ class InferencerLoader:
 
     def register_custom_model(self, model_name, model_type, model_class):
         self.model_factory.register_custom_model(model_name, model_type, model_class)
-

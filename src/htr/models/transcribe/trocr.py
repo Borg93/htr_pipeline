@@ -1,5 +1,5 @@
 
-from htr_pipeline.models.huggingface.huggingface_model import HuggingFaceModel
+from htr.models.huggingface.huggingface_model import HuggingFaceModel
 
 
 class TrOCR(HuggingFaceModel):

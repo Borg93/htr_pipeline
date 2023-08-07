@@ -3,17 +3,21 @@ from abc import ABC, abstractmethod
 from huggingface_hub import ModelHubMixin
 
 
-class Model(ModelHubMixin, ABC):
+class Model(ModelHubMixin,ABC):
+    def __init__(self, config_data):
+        self.config_data = config_data
+
+    @property
     @abstractmethod
-    def preprocess(self, input):
+    def model_type(self):
         pass
 
     @abstractmethod
-    def predict(self, input):
+    def predict(self, input_data):
         pass
 
     @abstractmethod
-    def postprocess(self, raw_output):
+    def load(self):
         pass
 
 

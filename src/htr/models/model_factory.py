@@ -1,50 +1,29 @@
-from htr.models.huggingface.trocr import TrOCR
-from htr.models.openmmlab.rmdet_region import RmtDetRegion
+from htr.enums import ModelType
+from htr.models.model import Model
+from htr.models.region.rmtDet_region import RmtDetRegion
 
 
 class ModelFactory:
     def __init__(self):
-        self.factories = {
-            'huggingface': HuggingFaceModelFactory(),
-            'openmmlab': OpenMMLabModelFactory(),
-            # add more as needed
-        }
-
-    def create(self, model_config):
-        framework = model_config['framework']
-        model_name = model_config['name']
-
-        if framework not in self.factories:
-            raise ValueError(f"Unknown model framework: {framework}")
-
-        return self.factories[framework].create(model_name)
-
-
-class HuggingFaceModelFactory:
-    def __init__(self):
         self.models = {
-            'TrOCR': TrOCR,
-            # 'modelB': HuggingFaceModelB
-            # add more as needed
-        }
-    
-    def create(self, model_name):
-        if model_name not in self.models:
-            raise ValueError(f"Unknown HuggingFace model: {model_name}")
-
-        return self.models[model_name](model_name)
-
-
-class OpenMMLabModelFactory:
-    def __init__(self):
-        self.models = {
-            'RmtDetRegion': RmtDetRegion,
-            # 'modelB': OpenMMLabModelB
-            # add more as needed
+            ModelType.RMTDET.value: RmtDetRegion,
+            # Add more as needed
         }
 
-    def create(self, model_name):
-        if model_name not in self.models:
-            raise ValueError(f"Unknown HuggingFace model: {model_name}")
+    def register_custom_model(self, model_name, model_type, model_class):
+        if not issubclass(model_class, Model):
+            raise TypeError("model_class must be a subclass of Model.")
+        self.models[model_name] = model_class
 
-        return self.models[model_name](model_name)
+    def create(self, model_name, model_type, config_data):
+        model_class = self.models.get(model_name)
+        if not model_class:
+            raise ValueError(f"Invalid model name: {model_name}")
+
+        model = model_class()
+        if model.model_type != model_type:
+            raise ValueError(f"Model type mismatch: model {model_name} is not of type {model_type}")
+
+        model.load_model(config_data)
+
+        return model

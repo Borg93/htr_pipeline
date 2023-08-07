@@ -1,8 +1,7 @@
-
 import os
 
-from htr_pipeline.enums import ModelFormat, ModelName, ModelType
-from htr_pipeline.models.model import Model
+from htr.enums import ModelName, ModelType
+from htr.models.model import Model
 
 
 class RmtDetRegion(Model):
@@ -30,8 +29,8 @@ class RmtDetRegion(Model):
         print("Model region predict")
         return "prediction from rmtdet_region"
 
-    def load_model(self, config_data):
-        # model_file_path = os.path.join(folder_path, ModelFormat.PYTORCH.value)
+    def load_model(self, folder_path):
+        model_file_path = os.path.join(folder_path, 'model.pth')
         # self.model = torch.load(model_file_path)
 
-        print(f"Model loaded: {self.model_name} from config.json with: {config_data}")
+        print(f"Model loaded: {self.model_name} from {model_file_path}")
