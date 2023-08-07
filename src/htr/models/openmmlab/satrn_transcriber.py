@@ -1,7 +1,7 @@
 
 from mmocr.apis import TextRecInferencer
 
-from htr_pipeline.models.openmmlab.openmmlab_model import OpenMMLabModel
+from htr.models.openmmlab.openmmlab_model import OpenMMLabModel
 
 
 class SatrnTranscriber(OpenMMLabModel):

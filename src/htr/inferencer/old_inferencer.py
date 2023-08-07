@@ -4,12 +4,12 @@ import gradio as gr
 import mmcv
 import numpy as np
 
-from src.htr_pipeline.models import HtrModels
-from src.htr_pipeline.utils.filter_segmask import FilterSegMask
-from src.htr_pipeline.utils.helper import timer_func
-from src.htr_pipeline.utils.order_of_object import OrderObject
-from src.htr_pipeline.utils.preprocess_img import Preprocess
-from src.htr_pipeline.utils.process_segmask import SegMaskHelper
+from src.htr.models import HtrModels
+from src.htr.utils.filter_segmask import FilterSegMask
+from src.htr.utils.helper import timer_func
+from src.htr.utils.order_of_object import OrderObject
+from src.htr.utils.preprocess_img import Preprocess
+from src.htr.utils.process_segmask import SegMaskHelper
 
 
 class Inferencer:
