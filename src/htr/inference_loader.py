@@ -1,84 +1,63 @@
 import logging
 
-from htr.enums import ConfigKey, StrategyType
+from htr.config_manager import ConfigManager
+from htr.enums import ConfigFile, ConfigKey  # TODO implement this
 from htr.inferencer.inferencer_factory import InferencerFactory
-from htr.models.model_factory import ModelFactory
-from htr.strategies.strategy_factory import (
-    PostprocessingStrategyFactory,
-    PreprocessingStrategyFactory,
-)
 
 
 class InferencerLoader:
-    def __init__(self, config_manager, inferencers):
-        self.config_manager = config_manager
-        self.inferencers = inferencers
-        self.model_factory = ModelFactory()
+    def __init__(self):
+        self.config_manager = ConfigManager()
+        self.inferencers = {}
         self.inferencer_factory = InferencerFactory()
-        self.preprocessing_strategy_factory = PreprocessingStrategyFactory()
-        self.postprocessing_strategy_factory = PostprocessingStrategyFactory()
 
-    def _get_inferencer_key(self, model_name, model_type):
-        return f"{model_name}_{model_type}"
+    def load_inferencer(self, config_data_or_path):
+        # Configuration Management
+        config_data = self._get_config_data(config_data_or_path)
 
-    def _is_already_loaded(self, inferencer_key, model_name):
-        if inferencer_key in self.inferencers:
-            logging.info(f"Configuration for model {model_name} already loaded, reusing existing inferencer.")
-            return True
-        logging.info(f"Loading {inferencer_key}.")
-        return False
-    
-    def load(self, config_data):
-        self.config_manager.add_config(config_data)
-        model_name = self.config_manager.get(ConfigKey.MODEL_NAME.value)
-        model_type = self.config_manager.get(ConfigKey.MODEL_TYPE.value)
+        inferencer_key = self._generate_inferencer_key(config_data)
 
-        inferencer_key = self._get_inferencer_key(model_name, model_type)
+        # Caching
+        if self._is_already_loaded(inferencer_key):
+            return self.inferencers[inferencer_key]
 
-        if self._is_already_loaded(inferencer_key, model_name):
-            return
+        # Use the factory to create the inferencer
+        inferencer = self.inferencer_factory.create_inferencer(config_data)
+        self.inferencers[inferencer_key] = inferencer
 
-        self._load_and_register(inferencer_key, model_name, model_type, config_data)
+        # Lifecycle Management: Initialization (if needed)
+        if hasattr(inferencer, 'initialize'):
+            inferencer.initialize()
 
-    def _load_and_register(self, inferencer_key, model_name, model_type, config_data):
-        try:
-            model = self.model_factory.create(model_name, model_type, config_data)
+        return inferencer
 
-            preprocessing_strategies = self._create_strategies(StrategyType.PREPROCESSING) #config_data
-            postprocessing_strategies = self._create_strategies(StrategyType.POSTPROCESSING)  #config_data
-
-            inferencer = self.inferencer_factory.create(model, preprocessing_strategies, postprocessing_strategies)
-            self.inferencers[inferencer_key] = inferencer
-
-        except Exception as e:
-            logging.error(f"Failed to load model: {str(e)}")
-
-    def _create_strategies(self, strategy_type: StrategyType):
-        strategy_factory = self._get_strategy_factory(strategy_type)
-
-        strategy_config = self.config_manager.get(strategy_type.value)
-        if not strategy_config:
-            logging.info(f"INFO: No configuration found for strategy type: {strategy_type}.")
-            return []
-
-        return [strategy_factory.create(strategy, strategy_type.value) for strategy in strategy_config]
-
-    def _get_strategy_factory(self, strategy_type):
-        if strategy_type == StrategyType.PREPROCESSING:
-            return self.preprocessing_strategy_factory
-        elif strategy_type == StrategyType.POSTPROCESSING:
-            return self.postprocessing_strategy_factory
+    def _get_config_data(self, config_data_or_path):
+        if isinstance(config_data_or_path, dict):
+            return config_data_or_path
+        elif isinstance(config_data_or_path, str):
+            return self.config_manager.load_from_path(config_data_or_path)
         else:
-            raise ValueError("Invalid strategy type")
+            raise TypeError("config_data_or_path must be a dictionary or a path.")
 
+    def _generate_inferencer_key(self, config_data):
+        # Generate a unique key for the inferencer based on the config_data
+        return hash(str(config_data))
 
+    def _is_already_loaded(self, inferencer_key):
+        return inferencer_key in self.inferencers
 
-
-# TODO make it possible for the user to add strat and model dynamically. As long they based
-# on the baseclass it is okej.
+    # Dynamic Registration (delegating to the factory)
     def register_custom_strategy(self, strategy_type, strategy_name, strategy_class):
-        strategy_factory = self._get_strategy_factory(strategy_type)
-        strategy_factory.register_custom_strategy(strategy_name, strategy_class)
+        self.inferencer_factory.register_custom_strategy(strategy_type, strategy_name, strategy_class)
 
     def register_custom_model(self, model_name, model_type, model_class):
-        self.model_factory.register_custom_model(model_name, model_type, model_class)
+        self.inferencer_factory.register_custom_model(model_name, model_type, model_class)
+
+
+    # Lifecycle Management: Cleanup (if needed)
+    def cleanup(self, inferencer_key):
+        inferencer = self.inferencers.get(inferencer_key)
+        if inferencer and hasattr(inferencer, 'cleanup'):
+            inferencer.cleanup()
+
+

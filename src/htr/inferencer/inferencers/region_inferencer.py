@@ -1,7 +1,7 @@
 import logging
 
 from htr.enums import InferencerType
-from htr.inferencer.inferencer import Inferencer
+from htr.inferencer.base_inferencer import Inferencer
 from htr.inferencer.visualizers.region_visualizer import RegionVisualizer
 
 

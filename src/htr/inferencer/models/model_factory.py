@@ -1,6 +1,6 @@
 from htr.enums import ModelName
-from htr.models.model import Model
-from htr.models.region.rmdet_region import RmtDetRegion
+from htr.inferencer.models.base_model import Model
+from htr.inferencer.models.region.rmdet_region import RmtDetRegion
 
 
 class ModelFactory:
