@@ -1,4 +1,3 @@
-import json
 import logging
 
 from htr.inference_loader import InferencerLoader
@@ -12,7 +11,7 @@ class HTREngine:
 
     @property
     def inferencer_keys(self):
-        return list(self.inferencer_loader.inferencers.keys())
+        return self.inferencer_loader.inferencers
 
     def push_to_hf_hub(self):
         raise NotImplementedError("The method to push to the hub is not implemented yet.")
@@ -23,8 +22,8 @@ class HTREngine:
     def load_pipeline(self):
         raise NotImplementedError("The method to load pipeline from config is not implemented yet.")
 
-    def load_inferencer(self, config_data_or_path):
-        return self.inferencer_loader.load_inferencer(config_data_or_path)
+    def load_inferencer(self, key, config_data_or_path):
+        self.inferencer_loader.load_inferencer(key, config_data_or_path)
 
     def run_inference(self, inferencer_key, input_image, visualize=False):
         return self._run_inferencer(inferencer_key, input_image, visualize)
@@ -55,6 +54,6 @@ if __name__ == "__main__":
     # engine = HTREngine(loader)
 
     engine = HTREngine()
-    engine.load_inferencer('/workspaces/htr/notebooks/RmtDet') 
+    engine.load_inferencer('/workspaces/htr/notebooks/RmtDet')
     # engine.run_inference('region', 'input_image.png')
 

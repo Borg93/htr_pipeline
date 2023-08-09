@@ -1,37 +1,30 @@
 import json
-import logging
+import os
 
 
 class ConfigManager:
-    def __init__(self, config_dict=None):
-        self.configs = {}  # Store configs by their model_name
+    def __init__(self):
+        self.configs = {}
 
-        if config_dict is not None:
-            self.add_config(config_dict)
+    def add_config(self, key, config_data_or_path):
+        config_data = self._get_config_data(config_data_or_path)
+        if key in self.configs:
+            raise ValueError(f"Key: {key} is already in use. Please use a different key.")
+        self.configs[key] = config_data
 
-    def add_config(self, config_dict):
-        model_name = config_dict.get('model_name')
+    def get_config(self, key):
+        return self.configs.get(key)
 
-        if model_name in self.configs:
-            if self.configs[model_name] != config_dict:
-                raise ValueError(f"Model name {model_name} is already used with a different configuration.")
+    def _get_config_data(self, config_data_or_path):
+        if isinstance(config_data_or_path, dict):
+            return config_data_or_path
+        elif isinstance(config_data_or_path, str):
+            if os.path.isdir(config_data_or_path):
+                config_data_or_path = os.path.join(config_data_or_path, 'config.json')
+            with open(config_data_or_path, 'r') as file:
+                return json.load(file)
         else:
-            self.configs[model_name] = config_dict
-
-        self.config_data = config_dict
-
-    def get(self, key, model_name=None, default_value=None):
-        config_data = self.configs[model_name] if model_name else self.config_data
-        return config_data.get(key, default_value)
-
-    def list_keys(self, model_name=None):
-        config_data = self.configs[model_name] if model_name else self.config_data
-        return list(config_data.keys())
-
-    def load_from_file(self, filepath):
-        with open(filepath, 'r') as file:
-            config_dict = json.load(file)
-        self.add_config(config_dict)
+            raise TypeError("config_data_or_path must be a dictionary or a path.")
 
 
 if __name__ == "__main__":
@@ -43,5 +36,10 @@ if __name__ == "__main__":
         "postprocessing": "simplepostprocessing",
         "verbose": True
     }
-    config_manager = ConfigManager(config_dict)
+    config_manager = ConfigManager()
+    config_manager.add_config("dict_test",config_dict)
+    config_manager.add_config("path_test","/home/gabriel/Desktop/htr_pipeline/notebooks/RmtDet")
+
+
+    print(config_manager.configs)
 

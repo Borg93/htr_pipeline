@@ -1,7 +1,6 @@
 from htr.htr_engine import HTREngine
 
-
 if __name__ == "__main__":
     engine = HTREngine()
-    engine.load_inferencer('./RmtDet')
-    engine.run_inference("RmtDetRegion_region", "")
+    engine.load_inferencer("test",'./RmtDet')
+    print(engine.inferencer_keys['test'].predict("test") )

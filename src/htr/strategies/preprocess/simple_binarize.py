@@ -1,5 +1,5 @@
 from htr.enums import StrategyName, StrategyType
-from htr.inferencer.strategies.base_strategy import Strategy
+from htr.strategies.base_strategy import Strategy
 
 
 class SimpleBinarize(Strategy):

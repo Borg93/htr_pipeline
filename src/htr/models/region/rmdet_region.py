@@ -1,7 +1,6 @@
-import os
 
 from htr.enums import ModelName, ModelType
-from htr.models.model import Model
+from htr.models.base_model import Model
 
 
 class RmtDetRegionConfig:
@@ -10,6 +9,7 @@ class RmtDetRegionConfig:
 
 class RmtDetRegion(Model):
     def __init__(self, config: RmtDetRegionConfig):
+        self._config = config
         self._model_type = ModelType.REGION.value
         self._model_name = ModelName.RMT_DET_REGION.value
 
