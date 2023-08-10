@@ -1,19 +1,9 @@
-from htr.enums import StrategyName, StrategyType
-from htr.strategies.base_strategy import Strategy
+from htr.strategies.base_strategy import PostProcessing
 
 
-class SimplePost(Strategy):
+class SimplePost(PostProcessing):
     def __init__(self):
         pass
-
-    @property
-    def strategy_name(self):
-        return StrategyName.SIMPLE_POSTPROCESSING.value
-
-    @property
-    def strategy_type(self):
-        return StrategyType.POSTPROCESSING.value
-
 
     def process(self, input_image):
         # Actual implementation of binarization goes here

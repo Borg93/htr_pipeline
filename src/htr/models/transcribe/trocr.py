@@ -1,4 +1,3 @@
-
 from htr.models.huggingface.huggingface_model import HuggingFaceModel
 
 
@@ -17,4 +16,3 @@ class TrOCR(HuggingFaceModel):
     def predict(self, input):
         # Implement prediction logic specific to ModelA
         pass
-

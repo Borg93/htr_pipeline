@@ -20,8 +20,8 @@ class ConfigManager:
             return config_data_or_path
         elif isinstance(config_data_or_path, str):
             if os.path.isdir(config_data_or_path):
-                config_data_or_path = os.path.join(config_data_or_path, 'config.json')
-            with open(config_data_or_path, 'r') as file:
+                config_data_or_path = os.path.join(config_data_or_path, "config.json")
+            with open(config_data_or_path, "r") as file:
                 return json.load(file)
         else:
             raise TypeError("config_data_or_path must be a dictionary or a path.")
@@ -34,12 +34,10 @@ if __name__ == "__main__":
         "model_type": "region",
         "preprocessing": ["simplebinarize", "resize"],
         "postprocessing": "simplepostprocessing",
-        "verbose": True
+        "verbose": True,
     }
     config_manager = ConfigManager()
-    config_manager.add_config("dict_test",config_dict)
-    config_manager.add_config("path_test","/home/gabriel/Desktop/htr_pipeline/notebooks/RmtDet")
-
+    config_manager.add_config("dict_test", config_dict)
+    config_manager.add_config("path_test", "/home/gabriel/Desktop/htr_pipeline/notebooks/RmtDet")
 
     print(config_manager.configs)
-

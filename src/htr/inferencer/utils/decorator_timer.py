@@ -11,5 +11,6 @@ def timer_func(func):
 
     return wrap_func
 
+
 if __name__ == "__main__":
     pass

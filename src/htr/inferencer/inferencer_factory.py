@@ -4,7 +4,7 @@ from htr.inferencer.inferencers.region_inferencer import RegionInferencer
 class InferencerFactory:
     def __init__(self):
         self.inferencers = {
-            'region': RegionInferencer,
+            RegionInferencer.inferencer_type: RegionInferencer,
             # ... other inferencers
         }
 

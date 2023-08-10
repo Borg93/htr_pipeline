@@ -1,25 +1,14 @@
-
-from htr.enums import ModelName, ModelType
-from htr.models.base_model import Model
+from htr.models.base_model import RegionModel
 
 
-class RmtDetRegionConfig:
+class RtmDetRegionConfig:
     # Define your configuration fields here.
     pass
 
-class RmtDetRegion(Model):
-    def __init__(self, config: RmtDetRegionConfig):
-        self._config = config
-        self._model_type = ModelType.REGION.value
-        self._model_name = ModelName.RMT_DET_REGION.value
 
-    @property
-    def model_type(self):
-        return self._model_type
-
-    @property
-    def model_name(self):
-        return self._model_name
+class RtmDetRegion(RegionModel):
+    def __init__(self, config: RtmDetRegionConfig):
+        super().__init__(config)
 
     def preprocess(self, input):
         # Implement preprocessing specific to ModelA
@@ -38,4 +27,4 @@ class RmtDetRegion(Model):
         # model_file_path = os.path.join(folder_path, 'model.pth')
         # self.model = torch.load(model_file_path)
 
-        print(f"Model loaded: {self.model_name} from 'model_file_path'")
+        print(f"Model loaded: {self.name} from 'model_file_path'")

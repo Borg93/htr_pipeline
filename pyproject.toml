@@ -22,7 +22,7 @@ no_implicit_reexport = true
 
 [tool.black]
 line-length = 119
-target-version = ['3.9'] 
+target-version = ['py39']
 
 [tool.ruff]
 ignore = ["C901", "E501", "E741", "W605"]

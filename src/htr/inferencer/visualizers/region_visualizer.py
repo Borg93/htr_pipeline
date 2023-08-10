@@ -1,2 +1,2 @@
-class RegionVisualizer():
+class RegionVisualizer:
     pass

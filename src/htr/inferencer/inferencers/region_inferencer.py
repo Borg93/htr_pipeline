@@ -1,25 +1,10 @@
-import logging
-
-from htr.enums import InferencerType
-from htr.inferencer.base_inferencer import Inferencer
+from htr.inferencer.base_inferencer import Region
 from htr.inferencer.visualizers.region_visualizer import RegionVisualizer
 
 
-class RegionInferencer(Inferencer):
+class RegionInferencer(Region):
     def __init__(self, model, preprocess_strategies=None, postprocess_strategies=None):
-        self.predicted = False
-        self.model = model
-        self.preprocess_strategies = preprocess_strategies or []
-        self.postprocess_strategies = postprocess_strategies or []
-
-        if not self.preprocess_strategies:
-            logging.info("INFO: No preprocess strategies provided.")
-        if not self.postprocess_strategies:
-            logging.info("INFO: No postprocess strategies provided.")
-
-    @property
-    def inferencer_type(self):
-        return InferencerType.REGION.value
+        super().__init__(model, preprocess_strategies, postprocess_strategies)
 
     def preprocess(self, input_image):
         for strategy in self.preprocess_strategies:

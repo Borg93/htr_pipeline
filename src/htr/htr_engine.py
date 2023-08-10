@@ -5,7 +5,7 @@ from htr.inferencer.base_inferencer import InferencerProtocol
 
 
 class HTREngine:
-    def __init__(self, inferencer_loader = InferencerLoader()):
+    def __init__(self, inferencer_loader=InferencerLoader()):
         logging.basicConfig(level=logging.INFO)
         self.inferencer_loader = inferencer_loader
 
@@ -13,14 +13,8 @@ class HTREngine:
     def inferencer_keys(self):
         return self.inferencer_loader.inferencers
 
-    def push_to_hf_hub(self):
-        raise NotImplementedError("The method to push to the hub is not implemented yet.")
-
-    def load_from_hf_hub(self):
-        raise NotImplementedError("The method to load from the hub is not implemented yet.")
-
-    def load_pipeline(self):
-        raise NotImplementedError("The method to load pipeline from config is not implemented yet.")
+    def get_inferencer_details(self, inferencer_key):
+        return self.inferencer_loader.get_inferencer_details(inferencer_key)
 
     def load_inferencer(self, key, config_data_or_path):
         self.inferencer_loader.load_inferencer(key, config_data_or_path)
@@ -46,14 +40,23 @@ class HTREngine:
             output = self.run_inference(inferencer_key, output)
         return output
 
+    # def push_to_hf_hub(self):
+    #     raise NotImplementedError("The method to push to the hub is not implemented yet.")
+
+    # def load_from_hf_hub(self):
+    #     raise NotImplementedError("The method to load from the hub is not implemented yet.")
+
+    # def load_pipeline(self):
+    #     raise NotImplementedError("The method to load pipeline from config is not implemented yet.")
+
+
 if __name__ == "__main__":
-      # Importing here to avoid circular imports
+    # Importing here to avoid circular imports
 
     # loader = InferencerLoader()
     # loader.register_custom_model("new_model_name", NewModelClass)
     # engine = HTREngine(loader)
 
     engine = HTREngine()
-    engine.load_inferencer('/workspaces/htr/notebooks/RmtDet')
+    engine.load_inferencer("/workspaces/htr/notebooks/RmtDet")
     # engine.run_inference('region', 'input_image.png')
-

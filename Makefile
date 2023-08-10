@@ -16,6 +16,10 @@ ACTIVATE_ENV = . venv/bin/activate
 help:
 	@grep -h "##" $(MAKEFILE_LIST) | grep -v grep | sed -e 's/\\$$//' -e 's/##//'
 
+project_structure:
+	tree > project_structure.txt
+
+
 ## connect_to_repo - Connects local repo to github repo with the same name as the repo locally
 connect_to_repo:
 	git init .

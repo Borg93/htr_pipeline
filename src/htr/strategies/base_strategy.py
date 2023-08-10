@@ -2,13 +2,14 @@ from abc import ABC, abstractmethod
 
 
 class Strategy(ABC):
+    strategy_type = None
+
     def __init__(self):
         pass
 
     @property
-    @abstractmethod
-    def strategy_name(self):
-        pass
+    def name(self):
+        return self.__class__.__name__
 
     @property
     @abstractmethod
@@ -18,3 +19,11 @@ class Strategy(ABC):
     @abstractmethod
     def process(self, input_image):
         pass
+
+
+class PreProcessing(Strategy):
+    strategy_type = "preprocessing"
+
+
+class PostProcessing(Strategy):
+    strategy_type = "postprocessing"
