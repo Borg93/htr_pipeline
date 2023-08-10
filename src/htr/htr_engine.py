@@ -11,7 +11,7 @@ class HTREngine:
 
     @property
     def inferencer_keys(self):
-        return self.inferencer_loader.inferencers
+        return {key: inferencer.details for key, inferencer in self.inferencer_loader.inferencers.items()}
 
     def get_inferencer_details(self, inferencer_key):
         return self.inferencer_loader.get_inferencer_details(inferencer_key)
