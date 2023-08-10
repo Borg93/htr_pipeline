@@ -1,7 +1,7 @@
 import logging
 
-from htr.inference_loader import InferencerLoader
 from htr.inferencer.base_inferencer import InferencerProtocol
+from htr.inferencer.inference_loader import InferencerLoader
 
 
 class HTREngine:
